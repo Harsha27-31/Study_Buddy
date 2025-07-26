@@ -1,0 +1,8 @@
+# Node modules should not be tracked
+node_modules/
+
+# Environment variables
+.env
+
+# Optional: ignore log files
+*.log

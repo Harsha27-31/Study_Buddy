@@ -1,0 +1,1068 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>StudyBuddy - Your Ultimate Learning Companion</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #6366f1;
+      --primary-light: #818cf8;
+      --secondary: #f59e0b;
+      --dark: #1e293b;
+      --light: #f8fafc;
+      --gray: #94a3b8;
+      --success: #10b981;
+      --glass: rgba(255, 255, 255, 0.15);
+      --glass-border: rgba(255, 255, 255, 0.2);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+      color: var(--dark);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* Navbar */
+    header {
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      padding: 1.2rem 5%;
+      box-shadow: 0 2px 20px rgba(0,0,0,0.05);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      border-bottom: 1px solid rgba(255,255,255,0.3);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+
+    .logo-icon {
+      color: var(--primary);
+      font-size: 1.8rem;
+    }
+
+    .logo-text {
+      font-size: 1.6rem;
+      font-weight: 700;
+      background: linear-gradient(to right, var(--primary), var(--primary-light));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    nav a {
+      color: var(--dark);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 1rem;
+      position: relative;
+      transition: all 0.3s ease;
+      padding: 0.5rem 0;
+    }
+
+    nav a::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: 0;
+      left: 0;
+      background: var(--primary);
+      transition: width 0.3s ease;
+    }
+
+    nav a:hover::after {
+      width: 100%;
+    }
+
+    nav a:hover {
+      color: var(--primary);
+    }
+
+    .cta-button {
+      background: var(--primary);
+      color: white;
+      padding: 0.6rem 1.5rem;
+      border-radius: 50px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 6px rgba(99, 102, 241, 0.2);
+    }
+
+    .cta-button:hover {
+      background: var(--primary-light);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(99, 102, 241, 0.3);
+      color: white;
+    }
+
+    .mobile-menu {
+      display: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+    /* Hero */
+    .hero {
+      position: relative;
+      padding: 8rem 5% 6rem;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, var(--primary-light) 0%, transparent 70%);
+      opacity: 0.1;
+      z-index: -1;
+      animation: float 8s infinite ease-in-out;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: -50%;
+      right: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, var(--secondary) 0%, transparent 70%);
+      opacity: 0.1;
+      z-index: -1;
+      animation: float 10s infinite ease-in-out reverse;
+    }
+
+    @keyframes float {
+      0%, 100% {
+        transform: translate(0, 0);
+      }
+      50% {
+        transform: translate(-5%, -5%);
+      }
+    }
+
+    .hero-content {
+      max-width: 800px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .hero h1 {
+      font-size: 3.5rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      line-height: 1.2;
+      background: linear-gradient(to right, var(--dark), var(--primary));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .hero p {
+      font-size: 1.2rem;
+      color: var(--gray);
+      margin-bottom: 2.5rem;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .hero-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      margin-bottom: 3rem;
+    }
+
+    .primary-btn {
+      background: var(--primary);
+      color: white;
+      padding: 0.9rem 2rem;
+      font-weight: 600;
+      text-decoration: none;
+      border-radius: 50px;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .primary-btn:hover {
+      background: var(--primary-light);
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+    }
+
+    .secondary-btn {
+      background: white;
+      color: var(--primary);
+      padding: 0.9rem 2rem;
+      font-weight: 600;
+      text-decoration: none;
+      border-radius: 50px;
+      transition: all 0.3s ease;
+      border: 2px solid var(--primary);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .secondary-btn:hover {
+      background: rgba(99, 102, 241, 0.1);
+      transform: translateY(-3px);
+    }
+
+    .hero-stats {
+      display: flex;
+      justify-content: center;
+      gap: 3rem;
+      margin-top: 3rem;
+      flex-wrap: wrap;
+    }
+
+    .stat-item {
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(5px);
+      padding: 1.5rem;
+      border-radius: 1rem;
+      min-width: 160px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+      border: 1px solid rgba(255,255,255,0.3);
+      transition: transform 0.3s ease;
+    }
+
+    .stat-item:hover {
+      transform: translateY(-5px);
+    }
+
+    .stat-number {
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-label {
+      color: var(--gray);
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    /* Features Section */
+    .features {
+      padding: 6rem 5%;
+      background: white;
+      position: relative;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+
+    .section-subtitle {
+      color: var(--primary);
+      font-weight: 600;
+      letter-spacing: 1px;
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+      font-size: 0.9rem;
+    }
+
+    .section-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      color: var(--dark);
+    }
+
+    .section-description {
+      color: var(--gray);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .feature-card {
+      background: white;
+      padding: 2.5rem 2rem;
+      border-radius: 1.5rem;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+      transition: all 0.3s ease;
+      border: 1px solid rgba(0,0,0,0.03);
+      position: relative;
+      overflow: hidden;
+      z-index: 1;
+    }
+
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.05) 0%, rgba(165, 180, 252, 0.05) 100%);
+      z-index: -1;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+    }
+
+    .feature-card:hover::before {
+      opacity: 1;
+    }
+
+    .feature-icon {
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(to right, var(--primary), var(--primary-light));
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .feature-card h3 {
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      color: var(--dark);
+    }
+
+    .feature-card p {
+      color: var(--gray);
+      margin-bottom: 1.5rem;
+    }
+
+    .feature-link {
+      color: var(--primary);
+      font-weight: 500;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.3s ease;
+    }
+
+    .feature-link i {
+      transition: transform 0.3s ease;
+    }
+
+    .feature-link:hover {
+      color: var(--primary-light);
+    }
+
+    .feature-link:hover i {
+      transform: translateX(5px);
+    }
+
+    /* Testimonials */
+    .testimonials {
+      padding: 6rem 5%;
+      background: linear-gradient(135deg, #f9fafb, #f1f5f9);
+      position: relative;
+    }
+
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .testimonial-card {
+      background: white;
+      padding: 2rem;
+      border-radius: 1.5rem;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.03);
+      transition: all 0.3s ease;
+    }
+
+    .testimonial-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+
+    .testimonial-content {
+      font-style: italic;
+      color: var(--dark);
+      margin-bottom: 1.5rem;
+      position: relative;
+    }
+
+    .testimonial-content::before {
+      content: '"';
+      font-size: 4rem;
+      color: var(--primary-light);
+      opacity: 0.2;
+      position: absolute;
+      top: -1.5rem;
+      left: -1rem;
+      font-family: serif;
+      line-height: 1;
+    }
+
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .author-avatar {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--primary-light);
+    }
+
+    .author-info h4 {
+      font-weight: 600;
+      color: var(--dark);
+    }
+
+    .author-info p {
+      color: var(--gray);
+      font-size: 0.9rem;
+    }
+
+    /* CTA Section */
+    .cta-section {
+      padding: 6rem 5%;
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      color: white;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-section::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+      z-index: 0;
+      animation: float 8s infinite ease-in-out;
+    }
+
+    .cta-content {
+      position: relative;
+      z-index: 1;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .cta-section h2 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+    }
+
+    .cta-section p {
+      font-size: 1.1rem;
+      opacity: 0.9;
+      margin-bottom: 2.5rem;
+    }
+
+    .cta-button {
+      background: white;
+      color: var(--primary);
+      padding: 1rem 2.5rem;
+      font-weight: 600;
+      border-radius: 50px;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    .cta-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+    }
+
+    /* Footer */
+    footer {
+      background: var(--dark);
+      color: white;
+      padding: 5rem 5% 2rem;
+    }
+
+    .footer-content {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 3rem;
+      max-width: 1200px;
+      margin: 0 auto 3rem;
+    }
+
+    .footer-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .footer-logo-icon {
+      color: var(--primary-light);
+      font-size: 1.8rem;
+    }
+
+    .footer-logo-text {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: white;
+    }
+
+    .footer-about p {
+      color: var(--gray);
+      margin-bottom: 1.5rem;
+    }
+
+    .social-links {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .social-link {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      transition: all 0.3s ease;
+    }
+
+    .social-link:hover {
+      background: var(--primary);
+      transform: translateY(-3px);
+    }
+
+    .footer-links h3 {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+      color: white;
+    }
+
+    .footer-links ul {
+      list-style: none;
+    }
+
+    .footer-links li {
+      margin-bottom: 0.8rem;
+    }
+
+    .footer-links a {
+      color: var(--gray);
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .footer-links a:hover {
+      color: var(--primary-light);
+    }
+
+    .footer-newsletter p {
+      color: var(--gray);
+      margin-bottom: 1.5rem;
+    }
+
+    .newsletter-form {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .newsletter-input {
+      flex: 1;
+      padding: 0.8rem 1rem;
+      border: none;
+      border-radius: 50px;
+      background: rgba(255,255,255,0.1);
+      color: white;
+      outline: none;
+    }
+
+    .newsletter-input::placeholder {
+      color: var(--gray);
+    }
+
+    .newsletter-button {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 0 1.5rem;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .newsletter-button:hover {
+      background: var(--primary-light);
+    }
+
+    .footer-bottom {
+      text-align: center;
+      padding-top: 2rem;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      color: var(--gray);
+      font-size: 0.9rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .hero h1 {
+        font-size: 3rem;
+      }
+    }
+
+    @media (max-width: 768px) {
+      header {
+        padding: 1rem 5%;
+      }
+
+      nav {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 80%;
+        max-width: 300px;
+        height: 100vh;
+        background: white;
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 2rem;
+        box-shadow: -5px 0 20px rgba(0,0,0,0.1);
+        transition: right 0.3s ease;
+        z-index: 1000;
+      }
+
+      nav.active {
+        right: 0;
+      }
+
+      nav a {
+        margin: 0;
+        padding: 1rem 0;
+        font-size: 1.1rem;
+      }
+
+      .mobile-menu {
+        display: block;
+        z-index: 1001;
+      }
+
+      .hero h1 {
+        font-size: 2.5rem;
+      }
+
+      .hero-buttons {
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .primary-btn, .secondary-btn {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .hero-stats {
+        flex-direction: column;
+        gap: 1.5rem;
+      }
+
+      .section-title {
+        font-size: 2rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hero h1 {
+        font-size: 2rem;
+      }
+
+      .hero p {
+        font-size: 1rem;
+      }
+
+      .feature-card {
+        padding: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-icon">
+      <i class="fas fa-book-open"></i>
+    </div>
+    <div class="logo-text">StudyBuddy</div>
+  </div>
+  
+  <nav id="mainNav">
+    <a href="/">Home</a>
+    <% if (user) { %>
+      <a href="/dashboard">Dashboard</a>
+      <a href="/resources">Resources</a>
+      <a href="/logout">Logout</a>
+    <% } else { %>
+      <a href="/login">Login</a>
+      <a href="/register">Register</a>
+    <% } %>
+    <a href="/about">About</a>
+    <% if (!user) { %>
+      <a href="/login" class="cta-button">Get Started</a>
+    <% } %>
+  </nav>
+  
+  <div class="mobile-menu" id="mobileMenu">
+    <i class="fas fa-bars"></i>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero-content">
+    <h1>Master Your Studies with Smart Learning Tools</h1>
+    <p>Access curated syllabus, organized notes, and personalized study resources tailored for your academic journey.</p>
+    
+    <div class="hero-buttons">
+      <% if (user) { %>
+        <a href="/dashboard" class="primary-btn">
+          Go to Dashboard <i class="fas fa-arrow-right"></i>
+        </a>
+      <% } else { %>
+        <a href="/register" class="primary-btn">
+          Get Started Free <i class="fas fa-rocket"></i>
+        </a>
+      <% } %>
+      <a href="/resources" class="secondary-btn">
+        Browse Resources <i class="fas fa-search"></i>
+      </a>
+    </div>
+    
+    <div class="hero-stats">
+      <div class="stat-item">
+        <div class="stat-number">10K+</div>
+        <div class="stat-label">Happy Students</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">500+</div>
+        <div class="stat-label">Courses</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">24/7</div>
+        <div class="stat-label">Support</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="features">
+  <div class="section-header">
+    <p class="section-subtitle">Why Choose StudyBuddy</p>
+    <h2 class="section-title">Features Designed for Academic Success</h2>
+    <p class="section-description">Our platform combines powerful tools with intuitive design to enhance your learning experience.</p>
+  </div>
+  
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-icon">
+        <i class="fas fa-book"></i>
+      </div>
+      <h3>Organized Notes</h3>
+      <p>Browse notes topic-wise and subject-wise, carefully curated for your course with quality ratings from peers.</p>
+      <a href="#" class="feature-link">Learn more <i class="fas fa-arrow-right"></i></a>
+    </div>
+    
+    <div class="feature-card">
+      <div class="feature-icon">
+        <i class="fas fa-map"></i>
+      </div>
+      <h3>Syllabus Explorer</h3>
+      <p>Interactive syllabus browser with progress tracking and recommended resources for each topic.</p>
+      <a href="#" class="feature-link">Learn more <i class="fas fa-arrow-right"></i></a>
+    </div>
+    
+    <div class="feature-card">
+      <div class="feature-icon">
+        <i class="fas fa-search"></i>
+      </div>
+      <h3>Smart Search</h3>
+      <p>AI-powered search understands your queries and finds the most relevant materials across all subjects.</p>
+      <a href="#" class="feature-link">Learn more <i class="fas fa-arrow-right"></i></a>
+    </div>
+    
+    <div class="feature-card">
+      <div class="feature-icon">
+        <i class="fas fa-mobile-alt"></i>
+      </div>
+      <h3>Mobile Optimized</h3>
+      <p>Study on the go with our fully responsive design and dedicated mobile features.</p>
+      <a href="#" class="feature-link">Learn more <i class="fas fa-arrow-right"></i></a>
+    </div>
+    
+    <div class="feature-card">
+      <div class="feature-icon">
+        <i class="fas fa-users"></i>
+      </div>
+      <h3>Study Groups</h3>
+      <p>Connect with classmates, share notes, and collaborate on projects in dedicated study spaces.</p>
+      <a href="#" class="feature-link">Learn more <i class="fas fa-arrow-right"></i></a>
+    </div>
+    
+    <div class="feature-card">
+      <div class="feature-icon">
+        <i class="fas fa-chart-line"></i>
+      </div>
+      <h3>Progress Tracking</h3>
+      <p>Visualize your learning journey with detailed analytics and personalized recommendations.</p>
+      <a href="#" class="feature-link">Learn more <i class="fas fa-arrow-right"></i></a>
+    </div>
+  </div>
+</section>
+
+<section class="testimonials">
+  <div class="section-header">
+    <p class="section-subtitle">Success Stories</p>
+    <h2 class="section-title">What Students Say About StudyBuddy</h2>
+    <p class="section-description">Join thousands of students who have transformed their learning experience.</p>
+  </div>
+  
+  <div class="testimonials-grid">
+    <div class="testimonial-card">
+      <div class="testimonial-content">
+        StudyBuddy helped me organize all my course materials in one place. The syllabus explorer is a game-changer - I always know exactly what to study next for my exams.
+      </div>
+      <div class="testimonial-author">
+        <img src="https://randomuser.me/api/portraits/women/32.jpg" alt="Sarah J." class="author-avatar">
+        <div class="author-info">
+          <h4>Sarah J.</h4>
+          <p>Computer Science Student</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="testimonial-card">
+      <div class="testimonial-content">
+        I've tried many study apps, but StudyBuddy stands out with its clean interface and powerful features. The community-shared notes have saved me countless hours.
+      </div>
+      <div class="testimonial-author">
+        <img src="https://randomuser.me/api/portraits/men/45.jpg" alt="Michael T." class="author-avatar">
+        <div class="author-info">
+          <h4>Michael T.</h4>
+          <p>Engineering Student</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="testimonial-card">
+      <div class="testimonial-content">
+        As a visual learner, I love how StudyBuddy presents information. The progress tracking keeps me motivated, and I've improved my grades significantly this semester.
+      </div>
+      <div class="testimonial-author">
+        <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Priya K." class="author-avatar">
+        <div class="author-info">
+          <h4>Priya K.</h4>
+          <p>Medical Student</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-section">
+  <div class="cta-content">
+    <h2>Ready to Transform Your Study Habits?</h2>
+    <p>Join thousands of students achieving academic success with StudyBuddy. Get started in seconds.</p>
+    <% if (user) { %>
+      <a href="/dashboard" class="cta-button">
+        Go to Dashboard <i class="fas fa-arrow-right"></i>
+      </a>
+    <% } else { %>
+      <a href="/register" class="cta-button">
+        Create Free Account <i class="fas fa-user-plus"></i>
+      </a>
+    <% } %>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-content">
+    <div class="footer-about">
+      <div class="footer-logo">
+        <div class="footer-logo-icon">
+          <i class="fas fa-book-open"></i>
+        </div>
+        <div class="footer-logo-text">StudyBuddy</div>
+      </div>
+      <p>Your ultimate companion for academic success. We provide the tools and resources to make studying efficient, organized, and effective.</p>
+      <div class="social-links">
+        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+        <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+        <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+      </div>
+    </div>
+    
+    <div class="footer-links">
+      <h3>Quick Links</h3>
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/about">About Us</a></li>
+        <li><a href="/resources">Resources</a></li>
+        <li><a href="/blog">Blog</a></li>
+        <li><a href="/contact">Contact</a></li>
+      </ul>
+    </div>
+    
+    <div class="footer-links">
+      <h3>Resources</h3>
+      <ul>
+        <li><a href="/syllabus">Syllabus Explorer</a></li>
+        <li><a href="/notes">Study Notes</a></li>
+        <li><a href="/flashcards">Flashcards</a></li>
+        <li><a href="/quizzes">Practice Quizzes</a></li>
+        <li><a href="/timetable">Study Planner</a></li>
+      </ul>
+    </div>
+    
+    <div class="footer-newsletter">
+      <h3>Newsletter</h3>
+      <p>Subscribe to get study tips, updates and new features.</p>
+      <form class="newsletter-form">
+        <input type="email" placeholder="Your email" class="newsletter-input" required>
+        <button type="submit" class="newsletter-button">
+          <i class="fas fa-paper-plane"></i>
+        </button>
+      </form>
+    </div>
+  </div>
+  
+  <div class="footer-bottom">
+    <p>&copy; 2023 StudyBuddy. All rights reserved. | <a href="/privacy">Privacy Policy</a> | <a href="/terms">Terms of Service</a></p>
+  </div>
+</footer>
+
+<script>
+  // Mobile menu toggle
+  const mobileMenu = document.getElementById('mobileMenu');
+  const mainNav = document.getElementById('mainNav');
+  
+  mobileMenu.addEventListener('click', () => {
+    mainNav.classList.toggle('active');
+    mobileMenu.innerHTML = mainNav.classList.contains('active') 
+      ? '<i class="fas fa-times"></i>' 
+      : '<i class="fas fa-bars"></i>';
+  });
+  
+  // Smooth scrolling for anchor links
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+      e.preventDefault();
+      
+      const targetId = this.getAttribute('href');
+      if(targetId === '#') return;
+      
+      const targetElement = document.querySelector(targetId);
+      if(targetElement) {
+        window.scrollTo({
+          top: targetElement.offsetTop - 80,
+          behavior: 'smooth'
+        });
+        
+        // Close mobile menu if open
+        if(mainNav.classList.contains('active')) {
+          mainNav.classList.remove('active');
+          mobileMenu.innerHTML = '<i class="fas fa-bars"></i>';
+        }
+      }
+    });
+  });
+  
+  // Animation on scroll
+  const animateOnScroll = () => {
+    const elements = document.querySelectorAll('.feature-card, .testimonial-card, .stat-item');
+    
+    elements.forEach(element => {
+      const elementPosition = element.getBoundingClientRect().top;
+      const windowHeight = window.innerHeight;
+      
+      if(elementPosition < windowHeight - 100) {
+        element.style.opacity = '1';
+        element.style.transform = 'translateY(0)';
+      }
+    });
+  };
+  
+  // Set initial state for animation
+  document.querySelectorAll('.feature-card, .testimonial-card, .stat-item').forEach(element => {
+    element.style.opacity = '0';
+    element.style.transform = 'translateY(20px)';
+    element.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+  });
+  
+  // Run once on load
+  window.addEventListener('load', animateOnScroll);
+  
+  // Run on scroll
+  window.addEventListener('scroll', animateOnScroll);
+</script>
+
+</body>
+</html>

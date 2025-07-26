@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>StudyBuddy - Reset Password</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #4361ee;
+      --primary-dark: #3a56d4;
+      --error: #ef233c;
+      --light: #f8f9fa;
+      --dark: #212529;
+      --gray: #6c757d;
+      --border-radius: 12px;
+      --box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+      --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    * { 
+      margin: 0; 
+      padding: 0; 
+      box-sizing: border-box; 
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      padding: 20px;
+      animation: fadeIn 1.2s ease-in-out;
+    }
+
+    .reset-container {
+      background: rgba(255, 255, 255, 0.95);
+      padding: 2.5rem;
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+      width: 100%;
+      max-width: 480px;
+      text-align: center;
+      color: var(--dark);
+      transition: var(--transition);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      animation: slideUp 0.9s ease-out;
+    }
+
+    .reset-container:hover {
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+    }
+
+    .logo {
+      margin-bottom: 1.5rem;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .logo i {
+      font-size: 1.8rem;
+    }
+
+    .reset-container h2 {
+      font-size: 1.75rem;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+      color: var(--dark);
+    }
+
+    .reset-container p {
+      color: var(--gray);
+      margin-bottom: 1.5rem;
+      font-size: 0.9375rem;
+      line-height: 1.6;
+    }
+
+    .form-group {
+      margin-bottom: 1.25rem;
+      text-align: left;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--dark);
+    }
+
+    .input-wrapper {
+      position: relative;
+    }
+
+    .reset-container input {
+      width: 100%;
+      padding: 0.875rem 1rem;
+      border: 1px solid #e9ecef;
+      border-radius: var(--border-radius);
+      font-size: 1rem;
+      background: #f8f9fa;
+      color: var(--dark);
+      transition: var(--transition);
+    }
+
+    .reset-container input::placeholder {
+      color: var(--gray);
+      opacity: 0.6;
+    }
+
+    .reset-container input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.15);
+      background: #fff;
+    }
+
+    .input-icon {
+      position: absolute;
+      right: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--gray);
+      cursor: pointer;
+    }
+
+    .reset-container button {
+      width: 100%;
+      padding: 1rem;
+      margin-top: 1rem;
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: var(--border-radius);
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .reset-container button:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+    }
+
+    .reset-container button:active {
+      transform: translateY(0);
+    }
+
+    .login-link {
+      font-size: 0.9375rem;
+      color: var(--gray);
+      margin-top: 1.5rem;
+    }
+
+    .login-link a {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 500;
+      transition: var(--transition);
+    }
+
+    .login-link a:hover {
+      text-decoration: underline;
+    }
+
+    .error {
+      color: var(--error);
+      font-size: 0.875rem;
+      margin-bottom: 1rem;
+      padding: 0.75rem;
+      background: rgba(239, 35, 60, 0.1);
+      border-radius: var(--border-radius);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .error i {
+      font-size: 1rem;
+    }
+
+    .success {
+      color: #2ecc71;
+      font-size: 0.875rem;
+      margin-bottom: 1rem;
+      padding: 0.75rem;
+      background: rgba(46, 204, 113, 0.1);
+      border-radius: var(--border-radius);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .success i {
+      font-size: 1rem;
+    }
+
+    @media (max-width: 576px) {
+      .reset-container {
+        padding: 1.5rem;
+      }
+      
+      .reset-container h2 {
+        font-size: 1.5rem;
+      }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <div class="reset-container">
+    <div class="logo">
+      <i class="fas fa-graduation-cap"></i>
+      <span>StudyBuddy</span>
+    </div>
+
+    <h2>Reset Your Password</h2>
+    <p>Enter your new password below. Make sure it's secure and memorable.</p>
+
+    <% if (error) { %>
+      <div class="error">
+        <i class="fas fa-exclamation-circle"></i>
+        <span><%= error %></span>
+      </div>
+    <% } %>
+
+    <% if (success) { %>
+      <div class="success">
+        <i class="fas fa-check-circle"></i>
+        <span><%= success %></span>
+      </div>
+    <% } %>
+
+    <form action="/reset/<%= token %>" method="POST">
+      <div class="form-group">
+        <label for="newPassword">New Password</label>
+        <div class="input-wrapper">
+          <input type="password" id="newPassword" name="newPassword" placeholder="Enter your new password" required />
+          <i class="fas fa-eye input-icon" id="togglePassword"></i>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="confirmPassword">Confirm Password</label>
+        <div class="input-wrapper">
+          <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm your new password" required />
+          <i class="fas fa-eye input-icon" id="toggleConfirmPassword"></i>
+        </div>
+      </div>
+
+      <button type="submit">
+        <i class="fas fa-key"></i> Reset Password
+      </button>
+    </form>
+
+    <p class="login-link">
+      Remember your password? <a href="/login">Sign in instead</a>
+    </p>
+  </div>
+
+  <script>
+    // Password visibility toggle
+    const togglePassword = document.getElementById('togglePassword');
+    const newPassword = document.getElementById('newPassword');
+    
+    const toggleConfirmPassword = document.getElementById('toggleConfirmPassword');
+    const confirmPassword = document.getElementById('confirmPassword');
+
+    togglePassword.addEventListener('click', function() {
+      const type = newPassword.getAttribute('type') === 'password' ? 'text' : 'password';
+      newPassword.setAttribute('type', type);
+      this.classList.toggle('fa-eye-slash');
+    });
+
+    toggleConfirmPassword.addEventListener('click', function() {
+      const type = confirmPassword.getAttribute('type') === 'password' ? 'text' : 'password';
+      confirmPassword.setAttribute('type', type);
+      this.classList.toggle('fa-eye-slash');
+    });
+
+    // Form validation
+    document.querySelector('form').addEventListener('submit', function(e) {
+      if (newPassword.value !== confirmPassword.value) {
+        e.preventDefault();
+        alert('Passwords do not match!');
+      }
+      
+      if (newPassword.value.length < 8) {
+        e.preventDefault();
+        alert('Password must be at least 8 characters long!');
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>StudyBuddy - Resources</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(to right, #f0f4ff, #e0eaff);
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 30px;
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+      transform: translateY(20px);
+      opacity: 0;
+      animation: fadeInUp 0.6s ease-out forwards;
+    }
+
+    @keyframes fadeInUp {
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 2.2rem;
+      color: #2c3e50;
+      margin-bottom: 30px;
+      background: linear-gradient(to right, #3a7bd5, #00d2ff);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      animation: textShine 3s ease-in-out infinite alternate;
+    }
+
+    @keyframes textShine {
+      0% {
+        background-position: 0% 50%;
+      }
+      100% {
+        background-position: 100% 50%;
+      }
+    }
+
+    select, input[type="text"] {
+      display: inline-block;
+      width: calc(25% - 10px);
+      margin: 8px 5px;
+      padding: 12px 15px;
+      border: 1px solid #e0e0e0;
+      border-radius: 12px;
+      font-size: 16px;
+      background: #f9f9f9;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+
+    select:focus, input[type="text"]:focus {
+      outline: none;
+      border-color: #4d90fe;
+      box-shadow: 0 0 0 2px rgba(77, 144, 254, 0.2);
+      transform: translateY(-2px);
+    }
+
+    @media (max-width: 768px) {
+      select, input[type="text"] {
+        width: 100%;
+        margin: 8px 0;
+      }
+    }
+
+    h2 {
+      margin-top: 40px;
+      color: #34495e;
+      font-size: 1.6rem;
+      border-bottom: 2px solid #eee;
+      padding-bottom: 8px;
+      position: relative;
+    }
+
+    h2::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 50px;
+      height: 3px;
+      background: linear-gradient(to right, #3a7bd5, #00d2ff);
+      border-radius: 3px;
+    }
+
+    .pdf-card {
+      background: #f8f9ff;
+      border: 1px solid #dfe6f1;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      opacity: 0;
+      transform: translateY(10px);
+      animation: cardAppear 0.4s ease-out forwards;
+      animation-delay: calc(var(--delay) * 0.1s);
+    }
+
+    @keyframes cardAppear {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .pdf-card:hover {
+      transform: translateY(-5px) !important;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+      border-color: #c9d6ff;
+    }
+
+    .pdf-card h3 {
+      margin: 0 0 12px;
+      font-size: 1.2rem;
+      color: #2e3a59;
+      font-weight: 600;
+    }
+
+    .pdf-card a {
+      color: #1e88e5;
+      text-decoration: none;
+      font-weight: 500;
+      position: relative;
+      padding-bottom: 2px;
+      transition: color 0.3s ease;
+    }
+
+    .pdf-card a::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: currentColor;
+      transition: width 0.3s ease;
+    }
+
+    .pdf-card a:hover {
+      color: #0d6efd;
+    }
+
+    .pdf-card a:hover::after {
+      width: 100%;
+    }
+
+    #videoSection {
+      background: #fff5f5;
+      padding: 25px;
+      border-radius: 12px;
+      text-align: center;
+      font-style: italic;
+      color: #d6336c;
+      margin-top: 20px;
+      border: 1px dashed #ffccd5;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% {
+        box-shadow: 0 0 0 0 rgba(214, 51, 108, 0.2);
+      }
+      70% {
+        box-shadow: 0 0 0 10px rgba(214, 51, 108, 0);
+      }
+      100% {
+        box-shadow: 0 0 0 0 rgba(214, 51, 108, 0);
+      }
+    }
+
+    #pdfContainer.empty {
+      text-align: center;
+      padding: 40px;
+      color: #6c757d;
+      font-size: 1.1rem;
+      animation: fadeIn 0.5s ease;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    .loading {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(0,0,0,0.1);
+      border-radius: 50%;
+      border-top-color: #3a7bd5;
+      animation: spin 1s ease-in-out infinite;
+      margin-left: 10px;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Study Resources</h1>
+
+    <select id="branchSelect">
+      <option value="">Select Branch</option>
+      <option value="CSE">CSE</option>
+      <option value="AIML">AIML</option>
+      <option value="CIC">CIC</option>
+    </select>
+
+    <select id="yearSelect">
+      <option value="">Select Year</option>
+      <option value="1st Year">1st Year</option>
+      <option value="2nd Year">2nd Year</option>
+      <option value="3rd Year">3rd Year</option>
+      <option value="4th Year">4th Year</option>
+    </select>
+
+    <select id="semSelect">
+      <option value="">Select Semester</option>
+      <option value="1st sem">1st sem</option>
+      <option value="2nd sem">2nd sem</option>
+    </select>
+
+    <select id="subjectSelect">
+      <option value="">All Subjects</option>
+    </select>
+
+    <input type="text" id="searchInput" placeholder="Search by topic..." />
+
+    <h2>PDFs</h2>
+    <div id="pdfContainer"></div>
+
+    <h2>Videos</h2>
+    <div id="videoSection">🎬 Videos Coming Soon...</div>
+  </div>
+
+  <script>
+    let studyData = [];
+
+    const branchSelect = document.getElementById("branchSelect");
+    const yearSelect = document.getElementById("yearSelect");
+    const semSelect = document.getElementById("semSelect");
+    const subjectSelect = document.getElementById("subjectSelect");
+    const searchInput = document.getElementById("searchInput");
+    const pdfContainer = document.getElementById("pdfContainer");
+
+    // Show loading state
+    pdfContainer.innerHTML = '<div style="text-align:center;"><span class="loading"></span> Loading resources...</div>';
+
+    fetch("/api/studydata")
+      .then((res) => res.json())
+      .then((data) => {
+        studyData = data;
+        updateFilters();
+      })
+      .catch((err) => {
+        console.error("Failed to fetch studydata:", err);
+        pdfContainer.innerHTML = '<div class="empty">Failed to load resources. Please try again later.</div>';
+      });
+
+    branchSelect.addEventListener("change", updateFilters);
+    yearSelect.addEventListener("change", updateFilters);
+    semSelect.addEventListener("change", updateFilters);
+    subjectSelect.addEventListener("change", renderResources);
+    searchInput.addEventListener("input", renderResources);
+
+    function updateFilters() {
+      const branch = branchSelect.value;
+      const year = yearSelect.value;
+      const sem = semSelect.value;
+
+      const filteredSubjects = [...new Set(
+        studyData
+          .filter(item =>
+            (!branch || item.branch === branch) &&
+            (!year || item.year === year) &&
+            (!sem || item.semester === sem)
+          )
+          .map(item => item.subject)
+      )];
+
+      subjectSelect.innerHTML = '<option value="">All Subjects</option>';
+      filteredSubjects.forEach(subject => {
+        const option = document.createElement("option");
+        option.value = subject;
+        option.textContent = subject;
+        subjectSelect.appendChild(option);
+      });
+
+      renderResources();
+    }
+
+    function renderResources() {
+      const branch = branchSelect.value;
+      const year = yearSelect.value;
+      const sem = semSelect.value;
+      const subject = subjectSelect.value;
+      const keyword = searchInput.value.toLowerCase();
+
+      const filtered = studyData.filter(item =>
+        (!branch || item.branch === branch) &&
+        (!year || item.year === year) &&
+        (!sem || item.semester === sem) &&
+        (!subject || item.subject === subject) &&
+        (!keyword || item.topic.toLowerCase().includes(keyword))
+      );
+
+      pdfContainer.innerHTML = "";
+
+      if (filtered.length === 0) {
+        pdfContainer.className = "empty";
+        pdfContainer.innerHTML = "<p>No matching PDFs found. Try different filters.</p>";
+        return;
+      }
+
+      pdfContainer.className = "";
+      filtered.forEach((item, index) => {
+        const div = document.createElement("div");
+        div.className = "pdf-card";
+        div.style.setProperty('--delay', index);
+        div.innerHTML = `
+          <h3>${item.topic}</h3>
+          <a href="${item.link}" target="_blank">Open PDF</a>
+        `;
+        pdfContainer.appendChild(div);
+      });
+    }
+  </script>
+</body>
+</html>
