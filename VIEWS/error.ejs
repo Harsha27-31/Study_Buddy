@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Error</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 50px;
+      background-color: #fce4e4;
+      color: #b00020;
+    }
+    .error-container {
+      max-width: 600px;
+      margin: auto;
+      background: #fff;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+  </style>
+</head>
+<body>
+  <div class="error-container">
+    <h1>Oops! Something went wrong.</h1>
+    <p><%= error.message || 'Unexpected error occurred.' %></p>
+  </div>
+</body>
+</html>

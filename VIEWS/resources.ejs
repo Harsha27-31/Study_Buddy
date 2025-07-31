@@ -4,31 +4,45 @@
   <meta charset="UTF-8" />
   <title>StudyBuddy - Resources</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+    :root {
+      --primary: #4361ee;
+      --secondary: #3f37c9;
+      --accent: #4895ef;
+      --light: #f8f9fa;
+      --dark: #212529;
+      --success: #4cc9f0;
+      --warning: #f72585;
+      --card-bg: #ffffff;
+    }
 
     * {
       box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
 
     body {
-      font-family: 'Inter', sans-serif;
-      background: linear-gradient(to right, #f0f4ff, #e0eaff);
-      margin: 0;
-      padding: 0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+      color: var(--dark);
       min-height: 100vh;
+      overflow-x: hidden;
     }
 
     .container {
-      max-width: 900px;
-      margin: 40px auto;
-      padding: 30px;
-      background: white;
-      border-radius: 16px;
-      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 2rem;
+      background: var(--card-bg);
+      border-radius: 20px;
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
       transform: translateY(20px);
       opacity: 0;
-      animation: fadeInUp 0.6s ease-out forwards;
+      animation: fadeInUp 0.6s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
     }
 
     @keyframes fadeInUp {
@@ -40,83 +54,137 @@
 
     h1 {
       text-align: center;
-      font-size: 2.2rem;
-      color: #2c3e50;
-      margin-bottom: 30px;
-      background: linear-gradient(to right, #3a7bd5, #00d2ff);
+      font-size: 2.8rem;
+      margin-bottom: 2rem;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
-      animation: textShine 3s ease-in-out infinite alternate;
-    }
-
-    @keyframes textShine {
-      0% {
-        background-position: 0% 50%;
-      }
-      100% {
-        background-position: 100% 50%;
-      }
-    }
-
-    select, input[type="text"] {
+      position: relative;
       display: inline-block;
-      width: calc(25% - 10px);
-      margin: 8px 5px;
-      padding: 12px 15px;
-      border: 1px solid #e0e0e0;
-      border-radius: 12px;
-      font-size: 16px;
-      background: #f9f9f9;
-      transition: all 0.3s ease;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+      left: 50%;
+      transform: translateX(-50%);
     }
 
-    select:focus, input[type="text"]:focus {
+    h1::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      border-radius: 2px;
+      transform: scaleX(0);
+      transform-origin: left;
+      animation: underlineExpand 1.2s ease-out 0.5s forwards;
+    }
+
+    @keyframes underlineExpand {
+      to {
+        transform: scaleX(1);
+      }
+    }
+
+    .filter-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      justify-content: center;
+      animation: fadeIn 0.8s ease-out 0.3s forwards;
+      opacity: 0;
+    }
+
+    @keyframes fadeIn {
+      to {
+        opacity: 1;
+      }
+    }
+
+    select, input {
+      padding: 0.8rem 1.2rem;
+      border: 2px solid #e0e0e0;
+      border-radius: 12px;
+      font-size: 1rem;
+      background: var(--light);
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+      min-width: 200px;
       outline: none;
-      border-color: #4d90fe;
-      box-shadow: 0 0 0 2px rgba(77, 144, 254, 0.2);
+    }
+
+    select:focus, input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(72, 149, 239, 0.2);
       transform: translateY(-2px);
     }
 
-    @media (max-width: 768px) {
-      select, input[type="text"] {
-        width: 100%;
-        margin: 8px 0;
-      }
+    .search-box {
+      position: relative;
+      flex-grow: 1;
+      max-width: 400px;
+    }
+
+    .search-box i {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #aaa;
+    }
+
+    .search-box input {
+      padding-left: 40px;
+      width: 100%;
     }
 
     h2 {
-      margin-top: 40px;
-      color: #34495e;
-      font-size: 1.6rem;
-      border-bottom: 2px solid #eee;
-      padding-bottom: 8px;
+      margin: 2.5rem 0 1.5rem;
+      color: var(--dark);
+      font-size: 1.8rem;
       position: relative;
+      display: inline-block;
+      opacity: 0;
+      transform: translateX(-20px);
+      animation: slideIn 0.6s ease-out 0.4s forwards;
+    }
+
+    @keyframes slideIn {
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
     }
 
     h2::after {
       content: '';
       position: absolute;
-      bottom: -2px;
+      bottom: -8px;
       left: 0;
-      width: 50px;
-      height: 3px;
-      background: linear-gradient(to right, #3a7bd5, #00d2ff);
-      border-radius: 3px;
+      width: 60px;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      border-radius: 2px;
     }
 
-    .pdf-card {
-      background: #f8f9ff;
-      border: 1px solid #dfe6f1;
-      border-radius: 12px;
-      padding: 20px;
-      margin-bottom: 20px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    .resources-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+
+    .resource-card {
+      background: var(--card-bg);
+      border-radius: 15px;
+      padding: 1.5rem;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
       transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      border: 1px solid rgba(0, 0, 0, 0.05);
       opacity: 0;
-      transform: translateY(10px);
-      animation: cardAppear 0.4s ease-out forwards;
+      transform: translateY(20px);
+      animation: cardAppear 0.5s ease-out forwards;
       animation-delay: calc(var(--delay) * 0.1s);
     }
 
@@ -127,95 +195,95 @@
       }
     }
 
-    .pdf-card:hover {
+    .resource-card:hover {
       transform: translateY(-5px) !important;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
-      border-color: #c9d6ff;
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+      border-color: var(--accent);
     }
 
-    .pdf-card h3 {
-      margin: 0 0 12px;
+    .resource-card h3 {
+      margin: 0 0 0.8rem;
       font-size: 1.2rem;
-      color: #2e3a59;
+      color: var(--dark);
       font-weight: 600;
     }
 
-    .pdf-card a {
-      color: #1e88e5;
-      text-decoration: none;
+    .resource-card .meta {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      font-size: 0.9rem;
+      color: #666;
+    }
+
+    .resource-card .meta span {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .resource-card .actions {
+      display: flex;
+      gap: 0.8rem;
+      margin-top: 1.2rem;
+    }
+
+    .btn {
+      padding: 0.6rem 1.2rem;
+      border-radius: 8px;
       font-weight: 500;
-      position: relative;
-      padding-bottom: 2px;
-      transition: color 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-decoration: none;
+      border: none;
     }
 
-    .pdf-card a::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 0;
-      height: 2px;
-      background: currentColor;
-      transition: width 0.3s ease;
+    .btn-primary {
+      background: var(--primary);
+      color: white;
     }
 
-    .pdf-card a:hover {
-      color: #0d6efd;
+    .btn-primary:hover {
+      background: var(--secondary);
+      transform: translateY(-2px);
     }
 
-    .pdf-card a:hover::after {
-      width: 100%;
+    .btn-outline {
+      background: transparent;
+      color: var(--primary);
+      border: 1px solid var(--primary);
     }
 
-    #videoSection {
-      background: #fff5f5;
-      padding: 25px;
-      border-radius: 12px;
+    .btn-outline:hover {
+      background: rgba(67, 97, 238, 0.1);
+      transform: translateY(-2px);
+    }
+
+    .empty-state {
       text-align: center;
-      font-style: italic;
-      color: #d6336c;
-      margin-top: 20px;
-      border: 1px dashed #ffccd5;
-      animation: pulse 2s infinite;
-    }
-
-    @keyframes pulse {
-      0% {
-        box-shadow: 0 0 0 0 rgba(214, 51, 108, 0.2);
-      }
-      70% {
-        box-shadow: 0 0 0 10px rgba(214, 51, 108, 0);
-      }
-      100% {
-        box-shadow: 0 0 0 0 rgba(214, 51, 108, 0);
-      }
-    }
-
-    #pdfContainer.empty {
-      text-align: center;
-      padding: 40px;
-      color: #6c757d;
+      padding: 3rem;
+      color: #666;
       font-size: 1.1rem;
       animation: fadeIn 0.5s ease;
+      grid-column: 1 / -1;
     }
 
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-      }
-      to {
-        opacity: 1;
-      }
+    .empty-state i {
+      font-size: 3rem;
+      color: #ccc;
+      margin-bottom: 1rem;
     }
 
     .loading {
       display: inline-block;
-      width: 20px;
-      height: 20px;
+      width: 24px;
+      height: 24px;
       border: 3px solid rgba(0,0,0,0.1);
       border-radius: 50%;
-      border-top-color: #3a7bd5;
+      border-top-color: var(--primary);
       animation: spin 1s ease-in-out infinite;
       margin-left: 10px;
     }
@@ -225,75 +293,200 @@
         transform: rotate(360deg);
       }
     }
+
+    .video-placeholder {
+      background: linear-gradient(135deg, #fff5f5 0%, #ffe8e8 100%);
+      padding: 3rem 2rem;
+      border-radius: 15px;
+      text-align: center;
+      border: 2px dashed #ffccd5;
+      margin-top: 2rem;
+      opacity: 0;
+      animation: fadeIn 0.8s ease-out 0.6s forwards;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .video-placeholder::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(
+        to bottom right,
+        rgba(255,255,255,0) 0%,
+        rgba(255,255,255,0.8) 50%,
+        rgba(255,255,255,0) 100%
+      );
+      transform: rotate(30deg);
+      animation: shine 3s infinite;
+    }
+
+    @keyframes shine {
+      0% {
+        left: -100%;
+        top: -100%;
+      }
+      100% {
+        left: 100%;
+        top: 100%;
+      }
+    }
+
+    .video-placeholder h3 {
+      color: var(--warning);
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      position: relative;
+    }
+
+    .video-placeholder p {
+      color: #d6336c;
+      margin-bottom: 1.5rem;
+      position: relative;
+    }
+
+    .coming-soon {
+      display: inline-block;
+      background: var(--warning);
+      color: white;
+      padding: 0.3rem 0.8rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-left: 0.5rem;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% {
+        transform: scale(1);
+        opacity: 1;
+      }
+      50% {
+        transform: scale(1.05);
+        opacity: 0.8;
+      }
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 1.5rem;
+        margin: 1rem;
+        border-radius: 15px;
+      }
+
+      h1 {
+        font-size: 2rem;
+      }
+
+      .filter-container {
+        flex-direction: column;
+      }
+
+      select, input, .search-box {
+        width: 100%;
+        min-width: auto;
+      }
+
+      .resources-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .filters {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.5rem;
+}
+.filters select, .filters label {
+  font-size: 14px;
+}
+
   </style>
 </head>
 <body>
   <div class="container">
     <h1>Study Resources</h1>
+    <div class="filters">
+      <label for="branchSelect">Branch:</label>
+      <select id="branchSelect">
+        <option value="">All Branches</option>
+        <% branches.forEach(branch => { %>
+          <option value="<%= branch %>"><%= branch %></option>
+        <% }) %>
+      </select>
 
-    <select id="branchSelect">
-      <option value="">Select Branch</option>
-      <option value="CSE">CSE</option>
-      <option value="AIML">AIML</option>
-      <option value="CIC">CIC</option>
-    </select>
+      <label for="yearSelect">Year:</label>
+      <select id="yearSelect">
+        <option value="">All Years</option>
+        <option value="1">1st Year</option>
+        <option value="2">2nd Year</option>
+        <option value="3">3rd Year</option>
+        <option value="4">4th Year</option>
+      </select>
 
-    <select id="yearSelect">
-      <option value="">Select Year</option>
-      <option value="1st Year">1st Year</option>
-      <option value="2nd Year">2nd Year</option>
-      <option value="3rd Year">3rd Year</option>
-      <option value="4th Year">4th Year</option>
-    </select>
+      <label for="semSelect">Semester:</label>
+      <select id="semSelect">
+        <option value="">All Semesters</option>
+        <option value="1">1st Semester</option>
+        <option value="2">2nd Semester</option>
+      </select>
 
-    <select id="semSelect">
-      <option value="">Select Semester</option>
-      <option value="1st sem">1st sem</option>
-      <option value="2nd sem">2nd sem</option>
-    </select>
+      <label for="subjectSelect">Subject:</label>
+      <select id="subjectSelect">
+        <option value="">All Subjects</option>
+      </select>
+    </div>
 
-    <select id="subjectSelect">
-      <option value="">All Subjects</option>
-    </select>
+    <h2>PDF Resources</h2>
+    <div id="resourcesContainer" class="resources-grid">
+      <div class="empty-state">
+        <i class="fas fa-book-open"></i>
+        <p>Select filters to view available resources</p>
+      </div>
+    </div>
 
-    <input type="text" id="searchInput" placeholder="Search by topic..." />
-
-    <h2>PDFs</h2>
-    <div id="pdfContainer"></div>
-
-    <h2>Videos</h2>
-    <div id="videoSection">🎬 Videos Coming Soon...</div>
+    <h2>Video Resources</h2>
+    <div class="video-placeholder">
+      <h3>Video Resources <span class="coming-soon">COMING SOON</span></h3>
+      <p>We're working hard to bring you high-quality video tutorials and lectures!</p>
+      <button class="btn btn-outline">
+        <i class="fas fa-bell"></i> Notify Me When Available
+      </button>
+    </div>
   </div>
 
   <script>
-    let studyData = [];
-
     const branchSelect = document.getElementById("branchSelect");
     const yearSelect = document.getElementById("yearSelect");
     const semSelect = document.getElementById("semSelect");
     const subjectSelect = document.getElementById("subjectSelect");
-    const searchInput = document.getElementById("searchInput");
-    const pdfContainer = document.getElementById("pdfContainer");
+    const resourcesContainer = document.getElementById("resourcesContainer");
 
-    // Show loading state
-    pdfContainer.innerHTML = '<div style="text-align:center;"><span class="loading"></span> Loading resources...</div>';
-
-    fetch("/api/studydata")
-      .then((res) => res.json())
-      .then((data) => {
-        studyData = data;
-        updateFilters();
-      })
-      .catch((err) => {
-        console.error("Failed to fetch studydata:", err);
-        pdfContainer.innerHTML = '<div class="empty">Failed to load resources. Please try again later.</div>';
+    function populateDropdown(select, options) {
+      select.innerHTML = '<option value="">All</option>';
+      options.forEach(option => {
+        const opt = document.createElement("option");
+        opt.value = option;
+        opt.textContent = option;
+        select.appendChild(opt);
       });
+    }
 
-    branchSelect.addEventListener("change", updateFilters);
-    yearSelect.addEventListener("change", updateFilters);
-    semSelect.addEventListener("change", updateFilters);
-    subjectSelect.addEventListener("change", renderResources);
-    searchInput.addEventListener("input", renderResources);
+    function getUniqueValues(data, key) {
+      return [...new Set(data.map(item => item[key]).filter(Boolean))];
+    }
+
+    populateDropdown(branchSelect, getUniqueValues(studyData, "branch"));
+    populateDropdown(yearSelect, getUniqueValues(studyData, "year"));
+    populateDropdown(semSelect, getUniqueValues(studyData, "semester"));
 
     function updateFilters() {
       const branch = branchSelect.value;
@@ -308,6 +501,7 @@
             (!sem || item.semester === sem)
           )
           .map(item => item.subject)
+          .filter(Boolean)
       )];
 
       subjectSelect.innerHTML = '<option value="">All Subjects</option>';
@@ -326,36 +520,49 @@
       const year = yearSelect.value;
       const sem = semSelect.value;
       const subject = subjectSelect.value;
-      const keyword = searchInput.value.toLowerCase();
 
       const filtered = studyData.filter(item =>
         (!branch || item.branch === branch) &&
         (!year || item.year === year) &&
         (!sem || item.semester === sem) &&
-        (!subject || item.subject === subject) &&
-        (!keyword || item.topic.toLowerCase().includes(keyword))
+        (!subject || item.subject === subject)
       );
 
-      pdfContainer.innerHTML = "";
+      resourcesContainer.innerHTML = "";
 
       if (filtered.length === 0) {
-        pdfContainer.className = "empty";
-        pdfContainer.innerHTML = "<p>No matching PDFs found. Try different filters.</p>";
+        resourcesContainer.innerHTML = "<p>No matching resources found.</p>";
         return;
       }
 
-      pdfContainer.className = "";
-      filtered.forEach((item, index) => {
-        const div = document.createElement("div");
-        div.className = "pdf-card";
-        div.style.setProperty('--delay', index);
-        div.innerHTML = `
+      filtered.forEach(item => {
+        const card = document.createElement("div");
+        card.className = "resource-card";
+
+        card.innerHTML = `
           <h3>${item.topic}</h3>
-          <a href="${item.link}" target="_blank">Open PDF</a>
+          <div class="meta">
+            <span><i class="fas fa-book"></i> ${item.subject}</span>
+            <span><i class="fas fa-code-branch"></i> ${item.branch}</span>
+            <span><i class="fas fa-calendar-alt"></i> Year ${item.year}, Sem ${item.semester}</span>
+          </div>
+          <div class="actions">
+            <a class="btn btn-primary" href="${item.link}" target="_blank">
+              <i class="fas fa-file-pdf"></i> Open PDF
+            </a>
+          </div>
         `;
-        pdfContainer.appendChild(div);
+
+        resourcesContainer.appendChild(card);
       });
     }
+
+    branchSelect.addEventListener("change", updateFilters);
+    yearSelect.addEventListener("change", updateFilters);
+    semSelect.addEventListener("change", updateFilters);
+    subjectSelect.addEventListener("change", renderResources);
+
+    updateFilters();
   </script>
 </body>
 </html>

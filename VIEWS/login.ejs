@@ -27,16 +27,17 @@
     }
 
     body {
-      background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
-      color: var(--dark);
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 2rem;
-      position: relative;
-      overflow: hidden;
-    }
+  background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
+  color: var(--dark);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  position: relative;
+  overflow-y: auto; /* ✅ ADD THIS LINE */
+}
+
 
     body::before {
       content: '';
@@ -83,6 +84,9 @@
       animation: slideIn 0.6s ease-out;
       position: relative;
       z-index: 1;
+      max-height: 100vh;
+      overflow-y: auto;
+
     }
 
     @keyframes slideIn {
@@ -342,13 +346,13 @@
           <div class="input-wrapper">
             <i class="fas fa-envelope input-icon"></i>
             <input 
-              type="email" 
-              id="userEmail" 
-              name="userEmail" 
-              class="form-control" 
-              placeholder="Enter your email" 
-              required
-            />
+            type="email" 
+            id="userEmail" 
+            name="userEmail"   
+            class="form-control" 
+            placeholder="Enter your email" 
+            required
+          />
           </div>
         </div>
 
@@ -357,13 +361,13 @@
           <div class="input-wrapper">
             <i class="fas fa-lock input-icon"></i>
             <input 
-              type="password" 
-              id="userPassword" 
-              name="userPassword" 
-              class="form-control" 
-              placeholder="Enter your password" 
-              required
-            />
+            type="password" 
+            id="userPassword" 
+            name="userPassword"   
+            class="form-control" 
+            placeholder="Enter your password" 
+            required
+          />
             <i class="fas fa-eye password-toggle" id="togglePassword"></i>
           </div>
           <a href="/forgot" style="display: block; text-align: right; margin-top: 0.5rem; font-size: 0.9rem; color: var(--primary);">
