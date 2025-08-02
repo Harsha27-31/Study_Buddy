@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile | StudyStudy</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --primary-hover: #3a56d4;
+            --secondary-color: #7209b7;
+            --text-color: #2b2d42;
+            --text-light: #8d99ae;
+            --bg-color: #f8f9fa;
+            --card-bg: #ffffff;
+            --border-color: #e9ecef;
+            --success-color: #4cc9f0;
+            --warning-color: #f8961e;
+            --danger-color: #ef233c;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            width: 250px;
+            background-color: var(--card-bg);
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            padding: 2rem 1rem;
+            position: fixed;
+            height: 100vh;
+            z-index: 100;
+        }
+
+        .logo {
+            margin-bottom: 2rem;
+            padding: 0 1rem;
+        }
+
+        .logo h1 {
+            color: var(--primary-color);
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        .logo span {
+            color: var(--text-color);
+        }
+
+        .nav {
+            margin-top: 2rem;
+        }
+
+        .nav ul {
+            list-style: none;
+        }
+
+        .nav li {
+            margin-bottom: 0.5rem;
+        }
+
+        .nav a {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            color: var(--text-light);
+            text-decoration: none;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .nav a:hover {
+            color: var(--primary-color);
+            background-color: rgba(67, 97, 238, 0.1);
+        }
+
+        .nav a.active {
+            color: var(--primary-color);
+            background-color: rgba(67, 97, 238, 0.1);
+            font-weight: 500;
+        }
+
+        .nav i {
+            margin-right: 0.75rem;
+            font-size: 1.1rem;
+            width: 24px;
+            text-align: center;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 250px;
+            padding: 2rem;
+        }
+
+        /* Profile Header */
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 2.5rem;
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .avatar-container {
+            position: relative;
+        }
+
+        .avatar {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid var(--primary-color);
+            box-shadow: 0 4px 20px rgba(67, 97, 238, 0.2);
+        }
+
+        .avatar-edit {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background-color: var(--primary-color);
+            color: white;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .avatar-edit:hover {
+            background-color: var(--primary-hover);
+            transform: scale(1.1);
+        }
+
+        .avatar-edit i {
+            font-size: 1rem;
+        }
+
+        .profile-info h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-color);
+        }
+
+        .profile-info p {
+            color: var(--text-light);
+            margin-bottom: 0.5rem;
+        }
+
+        .profile-meta {
+            display: flex;
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            color: var(--text-light);
+        }
+
+        .meta-item i {
+            margin-right: 0.5rem;
+            color: var(--primary-color);
+        }
+
+        .profile-actions {
+            margin-left: auto;
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            text-decoration: none;
+        }
+
+        .btn i {
+            margin-right: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(67, 97, 238, 0.2);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+        }
+
+        .btn-outline:hover {
+            background: rgba(67, 97, 238, 0.1);
+        }
+
+        /* Stats Cards */
+        .profile-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-card h3 {
+            margin: 0 0 0.5rem;
+            font-size: 1rem;
+            color: var(--text-light);
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+        }
+
+        .stat-card h3 i {
+            margin-right: 0.5rem;
+            color: var(--primary-color);
+        }
+
+        .stat-card p {
+            margin: 0;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .stat-card .stat-trend {
+            display: flex;
+            align-items: center;
+            margin-top: 0.5rem;
+            font-size: 0.85rem;
+        }
+
+        .stat-trend.up {
+            color: #2ecc71;
+        }
+
+        .stat-trend.down {
+            color: var(--danger-color);
+        }
+
+        .stat-trend i {
+            margin-right: 0.25rem;
+        }
+
+        /* Profile Details */
+        .profile-section {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 2rem;
+        }
+
+        .profile-section h2 {
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+            color: var(--text-color);
+            display: flex;
+            align-items: center;
+        }
+
+        .profile-section h2 i {
+            margin-right: 0.75rem;
+            color: var(--primary-color);
+        }
+
+        .detail-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .detail-item {
+            margin-bottom: 1.25rem;
+        }
+
+        .detail-item span {
+            display: block;
+            font-weight: 500;
+            color: var(--text-light);
+            margin-bottom: 0.25rem;
+            font-size: 0.9rem;
+        }
+
+        .detail-item p {
+            margin: 0;
+            color: var(--text-color);
+            font-size: 1rem;
+        }
+
+        /* Badges */
+        .badges-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .badge {
+            display: flex;
+            align-items: center;
+            background-color: rgba(67, 97, 238, 0.1);
+            color: var(--primary-color);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .badge i {
+            margin-right: 0.5rem;
+        }
+
+        /* Recent Activity */
+        .activity-list {
+            list-style: none;
+        }
+
+        .activity-item {
+            display: flex;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: rgba(67, 97, 238, 0.1);
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            flex-shrink: 0;
+        }
+
+        .activity-content {
+            flex: 1;
+        }
+
+        .activity-content p {
+            margin: 0.25rem 0;
+        }
+
+        .activity-time {
+            color: var(--text-light);
+            font-size: 0.85rem;
+        }
+
+        /* Footer */
+        .footer {
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .sidebar {
+                width: 220px;
+                padding: 1.5rem 0.5rem;
+            }
+
+            .main-content {
+                margin-left: 220px;
+                padding: 1.5rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+                padding: 1rem;
+            }
+
+            .nav ul {
+                display: flex;
+                overflow-x: auto;
+                padding-bottom: 0.5rem;
+            }
+
+            .nav li {
+                margin-bottom: 0;
+                margin-right: 0.5rem;
+            }
+
+            .nav a {
+                padding: 0.5rem 0.75rem;
+                white-space: nowrap;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 1.5rem 1rem;
+            }
+
+            .profile-header {
+                flex-direction: column;
+                text-align: center;
+                gap: 1.5rem;
+            }
+
+            .profile-actions {
+                margin-left: 0;
+                justify-content: center;
+                width: 100%;
+            }
+
+            .profile-info {
+                text-align: center;
+            }
+
+            .profile-meta {
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .profile-stats {
+                grid-template-columns: 1fr;
+            }
+
+            .profile-actions {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="logo">
+                <h1>Study<span>Buddy</span></h1>
+            </div>
+            <nav class="nav">
+                <ul>
+                    <li><a href="/home"><i class="fas fa-home"></i> Home</a></li>
+                    <li><a href="/dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                    <li><a href="/resources"><i class="fas fa-book"></i> Resources</a></li>
+                    <li><a href="/model-papers"><i class="fas fa-file-alt"></i> Model Papers</a></li>
+                    <li><a href="/profile" class="active"><i class="fas fa-user"></i> Profile</a></li>
+                    <li><a href="/settings"><i class="fas fa-cog"></i> Settings</a></li>
+                    <li><a href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Profile Header -->
+            <div class="profile-header">
+                <div class="avatar-container">
+                    <img src="https://ui-avatars.com/api/?name=Harsha+Wardham&background=4361ee&color=fff" alt="Profile Picture" class="avatar">
+                    <div class="avatar-edit" id="editAvatarBtn">
+                        <i class="fas fa-camera"></i>
+                    </div>
+                </div>
+                
+                <div class="profile-info">
+                    <h1>Harsha Wardham</h1>
+                    <p>Computer Science Student</p>
+                    <p>rapshahm-hawardharth@gmail.com</p>
+                    
+                    <div class="profile-meta">
+                        <div class="meta-item">
+                            <i class="fas fa-calendar-alt"></i>
+                            <span>Joined 15 Jan 2024</span>
+                        </div>
+                        <div class="meta-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>New York, USA</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="profile-actions">
+                    <button class="btn btn-primary">
+                        <i class="fas fa-share-alt"></i> Share Profile
+                    </button>
+                    <button class="btn btn-outline">
+                        <i class="fas fa-edit"></i> Edit Profile
+                    </button>
+                </div>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="profile-stats">
+                <div class="stat-card">
+                    <h3><i class="fas fa-book-open"></i> Subjects Enrolled</h3>
+                    <p>12</p>
+                    <div class="stat-trend up">
+                        <i class="fas fa-arrow-up"></i>
+                        <span>2 new this month</span>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <h3><i class="fas fa-cloud-upload-alt"></i> Resources Uploaded</h3>
+                    <p>47</p>
+                    <div class="stat-trend up">
+                        <i class="fas fa-arrow-up"></i>
+                        <span>5 this week</span>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <h3><i class="fas fa-users"></i> Connections</h3>
+                    <p>128</p>
+                    <div class="stat-trend up">
+                        <i class="fas fa-arrow-up"></i>
+                        <span>12 new</span>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <h3><i class="fas fa-star"></i> Achievements</h3>
+                    <p>8</p>
+                    <div class="stat-trend">
+                        <i class="fas fa-minus"></i>
+                        <span>Earn more!</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Personal Details Section -->
+            <div class="profile-section">
+                <h2><i class="fas fa-id-card"></i> Personal Information</h2>
+                
+                <div class="detail-grid">
+                    <div class="detail-item">
+                        <span>Full Name</span>
+                        <p>Harsha Wardham</p>
+                    </div>
+                    
+                    <div class="detail-item">
+                        <span>Email Address</span>
+                        <p>rapshahm-hawardharth@gmail.com</p>
+                    </div>
+                    
+                    <div class="detail-item">
+                        <span>Account Type</span>
+                        <p>Premium Student</p>
+                    </div>
+                    
+                    <div class="detail-item">
+                        <span>Student ID</span>
+                        <p>STU20245876</p>
+                    </div>
+                    
+                    <div class="detail-item">
+                        <span>Institution</span>
+                        <p>New York University</p>
+                    </div>
+                    
+                    <div class="detail-item">
+                        <span>Major</span>
+                        <p>Computer Science</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Badges Section -->
+            <div class="profile-section">
+                <h2><i class="fas fa-award"></i> Badges & Achievements</h2>
+                
+                <div class="badges-container">
+                    <div class="badge">
+                        <i class="fas fa-medal"></i>
+                        <span>Top Contributor</span>
+                    </div>
+                    
+                    <div class="badge">
+                        <i class="fas fa-star"></i>
+                        <span>Perfect Attendance</span>
+                    </div>
+                    
+                    <div class="badge">
+                        <i class="fas fa-trophy"></i>
+                        <span>Study Streak (30 days)</span>
+                    </div>
+                    
+                    <div class="badge">
+                        <i class="fas fa-lightbulb"></i>
+                        <span>Innovator</span>
+                    </div>
+                    
+                    <div class="badge">
+                        <i class="fas fa-heart"></i>
+                        <span>Community Helper</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Activity Section -->
+            <div class="profile-section">
+                <h2><i class="fas fa-history"></i> Recent Activity</h2>
+                
+                <ul class="activity-list">
+                    <li class="activity-item">
+                        <div class="activity-icon">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                        </div>
+                        <div class="activity-content">
+                            <p><strong>Uploaded a new resource</strong></p>
+                            <p>Data Structures Cheat Sheet.pdf</p>
+                            <p class="activity-time">2 hours ago</p>
+                        </div>
+                    </li>
+                    
+                    <li class="activity-item">
+                        <div class="activity-icon">
+                            <i class="fas fa-comment"></i>
+                        </div>
+                        <div class="activity-content">
+                            <p><strong>Commented on a discussion</strong></p>
+                            <p>"I found this algorithm really helpful for..."</p>
+                            <p class="activity-time">1 day ago</p>
+                        </div>
+                    </li>
+                    
+                    <li class="activity-item">
+                        <div class="activity-icon">
+                            <i class="fas fa-book"></i>
+                        </div>
+                        <div class="activity-content">
+                            <p><strong>Completed a study session</strong></p>
+                            <p>Algorithms - 45 minutes</p>
+                            <p class="activity-time">2 days ago</p>
+                        </div>
+                    </li>
+                    
+                    <li class="activity-item">
+                        <div class="activity-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="activity-content">
+                            <p><strong>Joined a study group</strong></p>
+                            <p>CS101 - Introduction to Programming</p>
+                            <p class="activity-time">1 week ago</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <footer class="footer">
+                <p>© 2025 StudyStudy. All rights reserved.</p>
+            </footer>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Avatar edit functionality
+            const editAvatarBtn = document.getElementById('editAvatarBtn');
+            const avatar = document.querySelector('.avatar');
+            
+            editAvatarBtn.addEventListener('click', function() {
+                const fileInput = document.createElement('input');
+                fileInput.type = 'file';
+                fileInput.accept = 'image/*';
+                
+                fileInput.addEventListener('change', function(e) {
+                    if (e.target.files.length > 0) {
+                        const file = e.target.files[0];
+                        const reader = new FileReader();
+                        
+                        reader.onload = function(event) {
+                            avatar.src = event.target.result;
+                        };
+                        
+                        reader.readAsDataURL(file);
+                    }
+                });
+                
+                fileInput.click();
+            });
+            
+            // Simulate loading dynamic content
+            setTimeout(() => {
+                // This would be replaced with actual API calls in a real application
+                console.log('Profile data loaded');
+            }, 500);
+        });
+    </script>
+</body>
+</html>

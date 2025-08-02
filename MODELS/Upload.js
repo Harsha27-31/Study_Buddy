@@ -3,10 +3,14 @@ const mongoose = require('mongoose');
 const uploadSchema = new mongoose.Schema({
   title: { type: String, required: true },
   description: String,
-  filename: String,
-  fileType: { type: String, enum: ['pdf', 'image', 'text', 'other'] },
+  filename: { type: String, required: true },
+  fileType: { type: String, required: true, enum: ['pdf', 'image', 'text'] },
   content: String,
-  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  fileSize: Number,
+  originalName: String,
+  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+  subject: String,
+  fileUrl: String,
   createdAt: { type: Date, default: Date.now }
 });
 

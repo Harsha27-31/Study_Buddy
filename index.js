@@ -58,9 +58,11 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 // CORS middleware
+// Update CORS middleware to allow PDF.js worker
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Range');
+  res.header('Access-Control-Expose-Headers', 'Content-Length, Content-Range');
   next();
 });
 
@@ -224,6 +226,168 @@ app.post("/reset/:token", async (req, res) => {
   res.render("reset", { token: null, error: null, success: "Password reset successful! You can now login." });
 });
 
+
+
+// Profile Route
+app.get('/profile', async (req, res) => {
+  try {
+    if (!req.session.userId) return res.redirect('/login');
+    
+    const user = await User.findById(req.session.userId);
+    if (!user) {
+      req.session.destroy();
+      return res.redirect('/login');
+    }
+
+    const stats = {
+      subjects: await List.distinct('subject', { addedBy: req.session.userId }).then(subjects => subjects.length),
+      uploadsCount: await Upload.countDocuments({ user: req.session.userId }),
+      sharedResources: await Resource.countDocuments({ addedBy: req.session.userId })
+    };
+
+    res.render('profile', {
+      user,
+      stats
+    });
+  } catch (err) {
+    console.error('Profile error:', err);
+    res.status(500).render('error', {
+      user: req.session.user || null,
+      error: 'Failed to load profile'
+    });
+  }
+});
+
+// Settings Route
+app.get('/settings', async (req, res) => {
+  try {
+    if (!req.session.userId) return res.redirect('/login');
+    
+    const user = await User.findById(req.session.userId);
+    if (!user) {
+      req.session.destroy();
+      return res.redirect('/login');
+    }
+
+    res.render('settings', {
+      user
+    });
+  } catch (err) {
+    console.error('Settings error:', err);
+    res.status(500).render('error', {
+      user: req.session.user || null,
+      error: 'Failed to load settings'
+    });
+  }
+});
+
+// API Route for updating profile
+app.post('/api/update-profile', async (req, res) => {
+  try {
+    if (!req.session.userId) return res.status(401).json({ success: false, error: 'Unauthorized' });
+
+    const { userName, userEmail } = req.body;
+    
+    // Check if email is already taken by another user
+    const existingUser = await User.findOne({ 
+      userEmail,
+      _id: { $ne: req.session.userId }
+    });
+    
+    if (existingUser) {
+      return res.status(400).json({ 
+        success: false, 
+        error: 'Email already in use by another account' 
+      });
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(
+      req.session.userId,
+      { userName, userEmail },
+      { new: true }
+    );
+
+    // Update session with new user data
+    req.session.user = {
+      _id: updatedUser._id,
+      userName: updatedUser.userName,
+      userEmail: updatedUser.userEmail
+    };
+
+    res.json({ 
+      success: true,
+      user: updatedUser
+    });
+  } catch (err) {
+    console.error('Update profile error:', err);
+    res.status(500).json({ 
+      success: false,
+      error: 'Failed to update profile'
+    });
+  }
+});
+
+// API Route for changing password
+app.post('/api/change-password', async (req, res) => {
+  try {
+    if (!req.session.userId) return res.status(401).json({ success: false, error: 'Unauthorized' });
+
+    const { currentPassword, newPassword } = req.body;
+    const user = await User.findById(req.session.userId);
+
+    if (!user) {
+      req.session.destroy();
+      return res.status(401).json({ success: false, error: 'User not found' });
+    }
+
+    const isMatch = await bcrypt.compare(currentPassword, user.userPassword);
+    if (!isMatch) {
+      return res.status(400).json({ 
+        success: false, 
+        error: 'Current password is incorrect' 
+      });
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    user.userPassword = hashedPassword;
+    await user.save();
+
+    res.json({ success: true });
+  } catch (err) {
+    console.error('Change password error:', err);
+    res.status(500).json({ 
+      success: false,
+      error: 'Failed to change password'
+    });
+  }
+});
+
+// API Route for deleting account
+app.delete('/api/delete-account', async (req, res) => {
+  try {
+    if (!req.session.userId) return res.status(401).json({ success: false, error: 'Unauthorized' });
+
+    // Delete user data
+    await Promise.all([
+      User.deleteOne({ _id: req.session.userId }),
+      List.deleteMany({ addedBy: req.session.userId }),
+      Resource.deleteMany({ addedBy: req.session.userId }),
+      Upload.deleteMany({ user: req.session.userId })
+    ]);
+
+    // Destroy session
+    req.session.destroy();
+
+    res.json({ success: true });
+  } catch (err) {
+    console.error('Delete account error:', err);
+    res.status(500).json({ 
+      success: false,
+      error: 'Failed to delete account'
+    });
+  }
+});
+
 // ======================== MAIN ROUTES ========================
 
 app.get('/home', async (req, res) => {
@@ -312,6 +476,58 @@ app.get('/subjects', async (req, res) => {
     res.status(500).send('Internal Server Error');
   }
 });
+// Add this before your upload routes
+app.use('/upload', (req, res, next) => {
+  // Prevent directory traversal
+  if (req.path.includes('../') || req.path.includes('..\\')) {
+    return res.status(403).send('Access denied');
+  }
+  next();
+});
+app.get('/model-papers', (req, res) => {
+  res.render('modelpapers')
+});
+app.get('/help', (req, res) => {
+  res.render('help'); // Render your help page
+});
+
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send('Something broke!');
+});
+app.get('/help/search', (req, res) => {
+  const query = req.query.q;
+  // Search your knowledge base or FAQ database
+  res.render('search-results', { query });
+});
+app.post('/api/support', async (req, res) => {
+  try {
+    const { name, email, subject, message } = req.body;
+    
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS
+      }
+    });
+
+    await transporter.sendMail({
+      from: process.env.EMAIL_USER,
+      to: 'support@studybuddy.com',
+      subject: `Support Request: ${subject}`,
+      text: `From: ${name} (${email})\n\n${message}`
+    });
+    
+
+    res.status(200).json({ success: true, message: 'Support request received' });
+  } catch (error) {
+    console.error('Support request error:', error);
+    res.status(500).json({ success: false, message: 'Error processing request' });
+  }
+});
 
 // ======================== UPLOAD ROUTES ========================
 
@@ -372,21 +588,45 @@ app.get('/upload', async (req, res) => {
     });
   }
 });
+// Add this route to check if file exists before displaying
+app.get('/upload/check/:filename', (req, res) => {
+  const filePath = path.join(uploadDir, req.params.filename);
+  
+  fs.stat(filePath, (err, stats) => {
+    if (err) {
+      return res.json({ exists: false });
+    }
+    
+    res.json({ 
+      exists: true,
+      size: stats.size,
+      modified: stats.mtime,
+      isPDF: path.extname(req.params.filename).toLowerCase() === '.pdf'
+    });
+  });
+});
 
 app.get('/upload/:id', async (req, res) => {
   try {
     if (!req.session.userId) return res.status(401).json({ error: 'Unauthorized' });
-    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
-      return res.status(400).json({ error: 'Invalid ID format' });
-    }
+
     const upload = await Upload.findOne({ 
       _id: req.params.id,
       user: req.session.userId 
-    });
+    }).lean();
 
     if (!upload) return res.status(404).json({ error: 'Upload not found' });
+
+    // Add additional file info
+    const filePath = path.join(uploadDir, upload.filename);
+    const fileExists = fs.existsSync(filePath);
     
-    res.json(upload);
+    res.json({
+      ...upload,
+      fileExists,
+      fileUrl: `/upload/${upload.filename}`,
+      pdfViewUrl: upload.fileType === 'pdf' ? `/upload/pdf/${upload.filename}` : null
+    });
   } catch (err) {
     console.error('Get upload error:', err);
     res.status(500).json({ error: 'Failed to fetch upload' });
@@ -394,134 +634,111 @@ app.get('/upload/:id', async (req, res) => {
 });
 
 // Enhanced upload route with better error handling
-app.post('/upload/upload', upload.single('file'), async (req, res, next) => {
+app.post('/upload/upload', upload.single('file'), async (req, res) => {
   try {
-    console.log('Upload request received');
-    console.log('File info:', {
-      originalname: req.file?.originalname,
-      mimetype: req.file?.mimetype,
-      size: req.file?.size,
-      filename: req.file?.filename
-    });
-    console.log('Body:', req.body);
-
     if (!req.session.userId) {
       return res.status(401).json({ 
         success: false,
-        error: 'Unauthorized - Please login to upload files' 
+        error: 'Unauthorized' 
       });
     }
 
-    // Check database connection
-    if (mongoose.connection.readyState !== 1) {
-      return res.status(500).json({ 
-        success: false,
-        error: 'Database not connected' 
-      });
-    }
-
-    if (!req.file || !req.body.title) {
-      if (req.file?.filename) {
-        const filePath = path.join(uploadDir, req.file.filename);
-        if (fs.existsSync(filePath)) {
-          fs.unlinkSync(filePath);
-        }
-      }
+    if (!req.file) {
       return res.status(400).json({ 
         success: false,
-        error: 'Missing required fields. Title and file are required.' 
+        error: 'No file uploaded' 
       });
     }
-
-    let fileType;
-    let content = '';
-    const mimeType = req.file.mimetype;
 
     // Determine file type
-    if (mimeType.includes('pdf')) {
+    let fileType;
+    const mimeType = req.file.mimetype;
+    
+    if (mimeType === 'application/pdf') {
       fileType = 'pdf';
-    } else if (mimeType.includes('image')) {
+    } else if (mimeType.startsWith('image/')) {
       fileType = 'image';
-    } else if (mimeType.includes('text') || path.extname(req.file.originalname).toLowerCase() === '.txt') {
-      fileType = 'text';
-      try {
-        const filePath = path.join(uploadDir, req.file.filename);
-        content = fs.readFileSync(filePath, 'utf8');
-      } catch (readErr) {
-        console.error('Error reading text file:', readErr);
-      }
     } else {
-      const filePath = path.join(uploadDir, req.file.filename);
-      if (fs.existsSync(filePath)) {
-        fs.unlinkSync(filePath);
-      }
-      return res.status(400).json({ 
-        success: false,
-        error: 'Unsupported file type' 
-      });
+      fileType = 'text';
     }
 
     const newUpload = new Upload({
-      title: req.body.title.trim(),
-      description: req.body.description?.trim() || '',
+      title: req.body.title,
+      description: req.body.description,
       filename: req.file.filename,
       fileType,
-      content,
       fileSize: req.file.size,
       originalName: req.file.originalname,
       user: req.session.userId,
-      subject: req.body.subject || 'General'
+      subject: req.body.subject || 'General',
+      fileUrl: `/upload/${req.file.filename}`
     });
 
     await newUpload.save();
 
-    res.status(201).json({ 
+    res.json({ 
       success: true,
       message: 'File uploaded successfully',
-      data: {
-        id: newUpload._id,
-        title: newUpload.title,
-        fileType: newUpload.fileType,
-        createdAt: newUpload.createdAt
-      }
+      upload: newUpload
     });
 
   } catch (err) {
-    console.error('Detailed upload error:', {
-      message: err.message,
-      stack: err.stack,
-      file: req?.file,
-      body: req?.body
-    });
-    
-    if (req.file?.filename) {
-      const filePath = path.join(uploadDir, req.file.filename);
-      if (fs.existsSync(filePath)) {
-        fs.unlinkSync(filePath);
-      }
-    }
-
+    console.error('Upload error:', err);
     res.status(500).json({ 
       success: false,
-      error: process.env.NODE_ENV === 'development' 
-        ? `Upload failed: ${err.message}`
-        : 'Failed to process upload. Please try again.'
+      error: 'Failed to upload file'
     });
   }
-}, (err, req, res, next) => {
-  // Multer error handler
-  if (err instanceof multer.MulterError) {
-    return res.status(400).json({ 
-      success: false,
-      error: err.message 
-    });
-  } else if (err) {
-    return res.status(500).json({ 
-      success: false,
-      error: err.message 
-    });
+});
+// Update your existing PDF route to better handle range requests
+// Add this middleware to protect against malicious PDFs
+app.use('/upload/pdf/:filename', (req, res, next) => {
+  const filename = req.params.filename;
+  if (!filename.match(/^[a-zA-Z0-9\-_]+\.pdf$/)) {
+    return res.status(403).send('Invalid file name');
   }
   next();
+});
+app.get('/upload/pdf/:filename', (req, res) => {
+  const filePath = path.join(uploadDir, req.params.filename);
+  
+  // Check if file exists
+  fs.access(filePath, fs.constants.F_OK, (err) => {
+    if (err) {
+      return res.status(404).send('File not found');
+    }
+
+    const stat = fs.statSync(filePath);
+    const fileSize = stat.size;
+    const range = req.headers.range;
+
+    if (range) {
+      // Handle range requests (for PDF.js)
+      const parts = range.replace(/bytes=/, "").split("-");
+      const start = parseInt(parts[0], 10);
+      const end = parts[1] ? parseInt(parts[1], 10) : fileSize-1;
+      
+      const chunksize = (end-start)+1;
+      const file = fs.createReadStream(filePath, {start, end});
+      const head = {
+        'Content-Range': `bytes ${start}-${end}/${fileSize}`,
+        'Accept-Ranges': 'bytes',
+        'Content-Length': chunksize,
+        'Content-Type': 'application/pdf',
+      };
+
+      res.writeHead(206, head);
+      file.pipe(res);
+    } else {
+      // Regular request
+      const head = {
+        'Content-Length': fileSize,
+        'Content-Type': 'application/pdf',
+      };
+      res.writeHead(200, head);
+      fs.createReadStream(filePath).pipe(res);
+    }
+  });
 });
 
 app.delete('/upload/:id', async (req, res) => {
@@ -582,7 +799,7 @@ app.get('/api/resources', async (req, res) => {
   try {
     if (!req.session.userId) return res.status(401).json({ error: 'Unauthorized' });
 
-    const { branch, year, semester, subject, search } = req.query;
+    const { branch, year, semester, subject, search, type } = req.query;
     
     const filter = { 
       $or: [
@@ -595,11 +812,14 @@ app.get('/api/resources', async (req, res) => {
     if (year) filter.year = year;
     if (semester) filter.semester = semester;
     if (subject) filter.subject = subject;
+    if (type) filter.type = type;
+    
     if (search) {
       filter.$or = [
         ...filter.$or,
         { topic: { $regex: search, $options: 'i' } },
-        { subject: { $regex: search, $options: 'i' } }
+        { subject: { $regex: search, $options: 'i' } },
+        { branch: { $regex: search, $options: 'i' } }
       ];
     }
 
@@ -613,30 +833,64 @@ app.get('/api/resources', async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch resources' });
   }
 });
-
-app.post('/api/resources', async (req, res) => {
+app.get('/api/resources', async (req, res) => {
   try {
     if (!req.session.userId) return res.status(401).json({ error: 'Unauthorized' });
 
-    const { topic, branch, year, semester, subject, link, type, isPublic } = req.body;
+    const { branch, year, semester, subject, search, type } = req.query;
     
-    const newResource = new Resource({
-      topic,
-      branch,
-      year,
-      semester,
-      subject,
-      link,
-      type,
-      isPublic: isPublic || false,
-      addedBy: req.session.userId
+    const filter = { 
+      $or: [
+        { isPublic: true },
+        { addedBy: req.session.userId }
+      ]
+    };
+
+    if (branch) filter.branch = branch;
+    if (year) filter.year = year;
+    if (semester) filter.semester = semester;
+    if (subject) filter.subject = subject;
+    if (type) filter.type = type;
+    
+    if (search) {
+      filter.$or = [
+        ...filter.$or,
+        { topic: { $regex: search, $options: 'i' } },
+        { subject: { $regex: search, $options: 'i' } },
+        { branch: { $regex: search, $options: 'i' } }
+      ];
+    }
+
+    const resources = await Resource.find(filter)
+      .populate('addedBy', 'userName')
+      .sort({ createdAt: -1 });
+
+    res.json(resources);
+  } catch (err) {
+    console.error('API Resources error:', err);
+    res.status(500).json({ error: 'Failed to fetch resources' });
+  }
+});
+app.get('/api/pdf-proxy', async (req, res) => {
+  try {
+    const { url } = req.query;
+    if (!url) return res.status(400).json({ error: 'URL parameter is required' });
+
+    const response = await axios({
+      method: 'get',
+      url: url,
+      responseType: 'stream'
     });
 
-    await newResource.save();
-    res.status(201).json(newResource);
+    // Set appropriate headers
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', 'inline');
+
+    // Pipe the PDF stream to the response
+    response.data.pipe(res);
   } catch (err) {
-    console.error('Create Resource error:', err);
-    res.status(500).json({ error: 'Failed to create resource' });
+    console.error('PDF Proxy error:', err);
+    res.status(500).json({ error: 'Failed to fetch PDF' });
   }
 });
 

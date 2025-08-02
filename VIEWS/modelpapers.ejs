@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Model Papers</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        /* Same styles as your resources page */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f7fa;
+        }
+        
+        .container {
+            background-color: white;
+            border-radius: 8px;
+            padding: 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        h1 {
+            color: #2c3e50;
+            margin-top: 0;
+        }
+        
+        .subtitle {
+            color: #7f8c8d;
+            margin-top: 0.5rem;
+        }
+        
+        .filters {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        
+        .filters label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .filters select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        
+        .papers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+        
+        .paper-card {
+            background-color: #f8f9fa;
+            border-radius: 6px;
+            padding: 1.5rem;
+            transition: transform 0.2s;
+            border-left: 4px solid #e74c3c;
+        }
+        
+        .paper-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .paper-card h3 {
+            margin-top: 0;
+            color: #2c3e50;
+        }
+        
+        .meta {
+            margin: 1rem 0;
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .meta span {
+            display: block;
+            margin-bottom: 0.3rem;
+        }
+        
+        .meta i {
+            width: 20px;
+            color: #e74c3c;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: background-color 0.2s;
+        }
+        
+        .btn-primary {
+            background-color: #e74c3c;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: #c0392b;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 2rem;
+            color: #666;
+            grid-column: 1 / -1;
+        }
+        
+        .empty-state i {
+            font-size: 3rem;
+            color: #ddd;
+            margin-bottom: 1rem;
+        }
+        
+        .year-tag {
+            display: inline-block;
+            background-color: #3498db;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            margin-left: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Model Papers</h1>
+    <p class="subtitle">Access previous exam papers and practice tests for better preparation</p>
+    
+    <div class="filters">
+      <div>
+        <label for="yearSelect">Year:</label>
+        <select id="yearSelect">
+          <option value="">All Years</option>
+          <!-- Options will be populated by JavaScript -->
+        </select>
+      </div>
+
+      <div>
+        <label for="semSelect">Semester:</label>
+        <select id="semSelect">
+          <option value="">All Semesters</option>
+          <option value="1">1st Semester</option>
+          <option value="2">2nd Semester</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="subjectSelect">Subject:</label>
+        <select id="subjectSelect">
+          <option value="">All Subjects</option>
+          <!-- Options will be populated by JavaScript -->
+        </select>
+      </div>
+    </div>
+
+    <div id="papersContainer" class="papers-grid">
+      <div class="empty-state">
+        <i class="fas fa-file-alt"></i>
+        <p>Select filters to view available model papers</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Model Papers Data - Stored in array
+    const papersData = [
+      {
+        title: "CP Midterm Exam 2023",
+        subject: "CP",
+        semester: "1",
+        year: "2023",
+        type: "Midterm",
+        link: "https://drive.google.com/cp-mid-2023"
+      },
+      {
+        title: "CHEMISTRY Final Exam 2022",
+        subject: "CHEMISTRY",
+        semester: "1",
+        year: "2022",
+        type: "Final",
+        link: "https://drive.google.com/chem-final-2022"
+      },
+      {
+        title: "M1 Practice Paper 2023",
+        subject: "M1",
+        semester: "1",
+        year: "2023",
+        type: "Practice",
+        link: "https://drive.google.com/m1-practice-2023"
+      },
+      {
+        title: "PHYSICS Model Paper 2021",
+        subject: "PHYSICS",
+        semester: "1",
+        year: "2021",
+        type: "Model",
+        link: "https://drive.google.com/phy-model-2021"
+      },
+      {
+        title: "BEEE Final Exam 2023",
+        subject: "BEEE",
+        semester: "2",
+        year: "2023",
+        type: "Final",
+        link: "https://drive.google.com/beee-final-2023"
+      },
+      {
+        title: "M2 Midterm Exam 2022",
+        subject: "M2",
+        semester: "2",
+        year: "2022",
+        type: "Midterm",
+        link: "https://drive.google.com/m2-mid-2022"
+      },
+      {
+        title: "DS Practice Paper 2023",
+        subject: "DS",
+        semester: "2",
+        year: "2023",
+        type: "Practice",
+        link: "https://drive.google.com/ds-practice-2023"
+      },
+      {
+        title: "ENGLISH Model Paper 2020",
+        subject: "ENGLISH",
+        semester: "2",
+        year: "2020",
+        type: "Model",
+        link: "https://drive.google.com/eng-model-2020"
+      }
+    ];
+
+    // DOM Elements
+    const yearSelect = document.getElementById("yearSelect");
+    const semSelect = document.getElementById("semSelect");
+    const subjectSelect = document.getElementById("subjectSelect");
+    const papersContainer = document.getElementById("papersContainer");
+
+    // Initialize page
+    document.addEventListener('DOMContentLoaded', function() {
+      // Populate year dropdown
+      const years = [...new Set(papersData.map(paper => paper.year))].sort().reverse();
+      years.forEach(year => {
+        const option = document.createElement('option');
+        option.value = year;
+        option.textContent = year;
+        yearSelect.appendChild(option);
+      });
+
+      // Populate subject dropdown
+      const subjects = [...new Set(papersData.map(paper => paper.subject))].sort();
+      subjects.forEach(subject => {
+        const option = document.createElement('option');
+        option.value = subject;
+        option.textContent = subject;
+        subjectSelect.appendChild(option);
+      });
+
+      // Add event listeners
+      yearSelect.addEventListener('change', renderPapers);
+      semSelect.addEventListener('change', renderPapers);
+      subjectSelect.addEventListener('change', renderPapers);
+    });
+
+    // Render papers based on filters
+    function renderPapers() {
+      const year = yearSelect.value;
+      const sem = semSelect.value;
+      const subject = subjectSelect.value;
+
+      // Filter papers
+      const filtered = papersData.filter(paper =>
+        (!year || paper.year === year) &&
+        (!sem || paper.semester === sem) &&
+        (!subject || paper.subject === subject)
+      );
+
+      papersContainer.innerHTML = '';
+
+      if (filtered.length === 0) {
+        papersContainer.innerHTML = `
+          <div class="empty-state">
+            <i class="fas fa-search"></i>
+            <p>No model papers match your selected filters</p>
+          </div>
+        `;
+        return;
+      }
+
+      filtered.forEach(paper => {
+        const card = document.createElement('div');
+        card.className = 'paper-card';
+        card.innerHTML = `
+          <h3>${paper.title} <span class="year-tag">${paper.year}</span></h3>
+          <div class="meta">
+            <span><i class="fas fa-book"></i> ${paper.subject}</span>
+            <span><i class="fas fa-calendar-alt"></i> Semester ${paper.semester}</span>
+            <span><i class="fas fa-tag"></i> ${paper.type} Paper</span>
+          </div>
+          <div class="actions">
+            <a class="btn btn-primary" href="${paper.link}" target="_blank">
+              <i class="fas fa-download"></i> Download
+            </a>
+          </div>
+        `;
+        papersContainer.appendChild(card);
+      });
+    }
+  </script>
+</body>
+</html>

@@ -5,18 +5,22 @@
   <title>StudyBuddy - Resources</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.min.js"></script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
     :root {
-      --primary: #4361ee;
-      --secondary: #3f37c9;
-      --accent: #4895ef;
-      --light: #f8f9fa;
-      --dark: #212529;
-      --success: #4cc9f0;
-      --warning: #f72585;
+      --primary: #5e35b1;
+      --secondary: #4527a0;
+      --accent: #7c4dff;
+      --light: #f5f3ff;
+      --dark: #1a237e;
+      --success: #26a69a;
+      --warning: #ff7043;
       --card-bg: #ffffff;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.12);
+      --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+      --shadow-lg: 0 10px 25px rgba(0,0,0,0.1);
     }
 
     * {
@@ -27,7 +31,7 @@
 
     body {
       font-family: 'Poppins', sans-serif;
-      background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+      background: linear-gradient(135deg, #f3e5f5 0%, #e8eaf6 100%);
       color: var(--dark);
       min-height: 100vh;
       overflow-x: hidden;
@@ -38,8 +42,8 @@
       margin: 2rem auto;
       padding: 2rem;
       background: var(--card-bg);
-      border-radius: 20px;
-      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+      border-radius: 12px;
+      box-shadow: var(--shadow-lg);
       transform: translateY(20px);
       opacity: 0;
       animation: fadeInUp 0.6s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
@@ -54,12 +58,9 @@
 
     h1 {
       text-align: center;
-      font-size: 2.8rem;
-      margin-bottom: 2rem;
-      background: linear-gradient(90deg, var(--primary), var(--accent));
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
+      font-size: 2.5rem;
+      margin-bottom: 1.5rem;
+      color: var(--primary);
       position: relative;
       display: inline-block;
       left: 50%;
@@ -69,7 +70,7 @@
     h1::after {
       content: '';
       position: absolute;
-      bottom: -10px;
+      bottom: -8px;
       left: 0;
       width: 100%;
       height: 4px;
@@ -86,63 +87,56 @@
       }
     }
 
-    .filter-container {
+    .filters {
       display: flex;
-      flex-wrap: wrap;
       gap: 1rem;
+      flex-wrap: wrap;
       margin-bottom: 2rem;
-      justify-content: center;
-      animation: fadeIn 0.8s ease-out 0.3s forwards;
-      opacity: 0;
+      background: rgba(255,255,255,0.9);
+      padding: 1.5rem;
+      border-radius: 10px;
+      box-shadow: var(--shadow-sm);
+      animation: slideInDown 0.5s ease-out;
     }
 
-    @keyframes fadeIn {
+    @keyframes slideInDown {
+      from {
+        transform: translateY(-20px);
+        opacity: 0;
+      }
       to {
+        transform: translateY(0);
         opacity: 1;
       }
     }
 
-    select, input {
-      padding: 0.8rem 1.2rem;
-      border: 2px solid #e0e0e0;
-      border-radius: 12px;
-      font-size: 1rem;
-      background: var(--light);
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-      min-width: 200px;
+    .filters label {
+      font-weight: 500;
+      color: var(--dark);
+      margin-right: 0.5rem;
+      font-size: 0.9rem;
+    }
+
+    .filters select {
+      padding: 0.7rem 1rem;
+      border: 2px solid #d1c4e9;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      background: white;
       outline: none;
+      transition: all 0.3s ease;
+      min-width: 180px;
     }
 
-    select:focus, input:focus {
+    .filters select:focus {
       border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(72, 149, 239, 0.2);
-      transform: translateY(-2px);
-    }
-
-    .search-box {
-      position: relative;
-      flex-grow: 1;
-      max-width: 400px;
-    }
-
-    .search-box i {
-      position: absolute;
-      left: 15px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: #aaa;
-    }
-
-    .search-box input {
-      padding-left: 40px;
-      width: 100%;
+      box-shadow: 0 0 0 3px rgba(124, 77, 255, 0.2);
     }
 
     h2 {
-      margin: 2.5rem 0 1.5rem;
-      color: var(--dark);
-      font-size: 1.8rem;
+      margin: 2rem 0 1rem;
+      color: var(--primary);
+      font-size: 1.6rem;
       position: relative;
       display: inline-block;
       opacity: 0;
@@ -160,28 +154,28 @@
     h2::after {
       content: '';
       position: absolute;
-      bottom: -8px;
+      bottom: -6px;
       left: 0;
-      width: 60px;
-      height: 4px;
-      background: linear-gradient(90deg, var(--primary), var(--accent));
+      width: 50px;
+      height: 3px;
+      background: var(--accent);
       border-radius: 2px;
     }
 
     .resources-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 1.5rem;
-      margin-top: 1.5rem;
+      gap: 1.2rem;
+      margin-top: 1.2rem;
     }
 
     .resource-card {
-      background: var(--card-bg);
-      border-radius: 15px;
+      background: white;
+      border-radius: 10px;
       padding: 1.5rem;
-      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+      box-shadow: var(--shadow-md);
       transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-      border: 1px solid rgba(0, 0, 0, 0.05);
+      border: 1px solid #e1bee7;
       opacity: 0;
       transform: translateY(20px);
       animation: cardAppear 0.5s ease-out forwards;
@@ -197,7 +191,7 @@
 
     .resource-card:hover {
       transform: translateY(-5px) !important;
-      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+      box-shadow: var(--shadow-lg);
       border-color: var(--accent);
     }
 
@@ -210,16 +204,20 @@
 
     .resource-card .meta {
       display: flex;
-      gap: 1rem;
+      gap: 0.8rem;
       margin-bottom: 1rem;
-      font-size: 0.9rem;
-      color: #666;
+      font-size: 0.85rem;
+      color: #5e35b1;
+      flex-wrap: wrap;
     }
 
     .resource-card .meta span {
       display: flex;
       align-items: center;
       gap: 0.3rem;
+      background: #ede7f6;
+      padding: 0.3rem 0.8rem;
+      border-radius: 20px;
     }
 
     .resource-card .actions {
@@ -239,6 +237,7 @@
       transition: all 0.2s ease;
       text-decoration: none;
       border: none;
+      font-size: 0.9rem;
     }
 
     .btn-primary {
@@ -258,191 +257,228 @@
     }
 
     .btn-outline:hover {
-      background: rgba(67, 97, 238, 0.1);
+      background: rgba(94, 53, 177, 0.1);
       transform: translateY(-2px);
     }
 
     .empty-state {
       text-align: center;
-      padding: 3rem;
-      color: #666;
-      font-size: 1.1rem;
+      padding: 2rem;
+      color: #7e57c2;
+      font-size: 1rem;
       animation: fadeIn 0.5s ease;
       grid-column: 1 / -1;
     }
 
     .empty-state i {
-      font-size: 3rem;
-      color: #ccc;
-      margin-bottom: 1rem;
+      font-size: 2.5rem;
+      color: #d1c4e9;
+      margin-bottom: 0.8rem;
+      animation: float 3s ease-in-out infinite;
     }
 
-    .loading {
-      display: inline-block;
-      width: 24px;
-      height: 24px;
-      border: 3px solid rgba(0,0,0,0.1);
-      border-radius: 50%;
-      border-top-color: var(--primary);
-      animation: spin 1s ease-in-out infinite;
-      margin-left: 10px;
-    }
-
-    @keyframes spin {
-      to {
-        transform: rotate(360deg);
-      }
-    }
-
-    .video-placeholder {
-      background: linear-gradient(135deg, #fff5f5 0%, #ffe8e8 100%);
-      padding: 3rem 2rem;
-      border-radius: 15px;
-      text-align: center;
-      border: 2px dashed #ffccd5;
-      margin-top: 2rem;
-      opacity: 0;
-      animation: fadeIn 0.8s ease-out 0.6s forwards;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .video-placeholder::before {
-      content: '';
-      position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: linear-gradient(
-        to bottom right,
-        rgba(255,255,255,0) 0%,
-        rgba(255,255,255,0.8) 50%,
-        rgba(255,255,255,0) 100%
-      );
-      transform: rotate(30deg);
-      animation: shine 3s infinite;
-    }
-
-    @keyframes shine {
-      0% {
-        left: -100%;
-        top: -100%;
-      }
-      100% {
-        left: 100%;
-        top: 100%;
-      }
-    }
-
-    .video-placeholder h3 {
-      color: var(--warning);
-      font-size: 1.5rem;
-      margin-bottom: 1rem;
-      position: relative;
-    }
-
-    .video-placeholder p {
-      color: #d6336c;
-      margin-bottom: 1.5rem;
-      position: relative;
-    }
-
-    .coming-soon {
-      display: inline-block;
-      background: var(--warning);
-      color: white;
-      padding: 0.3rem 0.8rem;
-      border-radius: 20px;
-      font-size: 0.8rem;
-      font-weight: 600;
-      margin-left: 0.5rem;
-      animation: pulse 2s infinite;
-    }
-
-    @keyframes pulse {
-      0% {
-        transform: scale(1);
-        opacity: 1;
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(0);
       }
       50% {
-        transform: scale(1.05);
-        opacity: 0.8;
-      }
-      100% {
-        transform: scale(1);
-        opacity: 1;
+        transform: translateY(-8px);
       }
     }
 
+    /* PDF Viewer Modal */
+    .pdf-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.9);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .pdf-modal.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .pdf-container {
+      width: 85%;
+      height: 85%;
+      background: white;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 5px 30px rgba(0,0,0,0.4);
+      transform: scale(0.9);
+      transition: transform 0.3s ease;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .pdf-modal.active .pdf-container {
+      transform: scale(1);
+    }
+
+    .pdf-header {
+      padding: 1rem;
+      background: var(--primary);
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .pdf-header h3 {
+      margin: 0;
+      font-size: 1.1rem;
+      font-weight: 500;
+    }
+
+    .close-btn {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1.5rem;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+
+    .close-btn:hover {
+      transform: rotate(90deg);
+    }
+
+    .pdf-viewer-container {
+      flex: 1;
+      overflow: auto;
+      position: relative;
+    }
+
+    #pdfViewer {
+      width: 100%;
+      height: 100%;
+    }
+
+    .pdf-controls {
+      padding: 0.8rem;
+      background: #f3e5f5;
+      display: flex;
+      gap: 0.8rem;
+      align-items: center;
+      border-top: 1px solid #d1c4e9;
+    }
+
+    .pdf-controls button {
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 6px;
+      background: var(--primary);
+      color: white;
+      cursor: pointer;
+      transition: background 0.2s ease;
+      font-size: 0.9rem;
+    }
+
+    .pdf-controls button:hover {
+      background: var(--secondary);
+    }
+
+    .page-info {
+      margin: 0 1rem;
+      font-size: 0.9rem;
+      color: #5e35b1;
+    }
+
+    /* Responsive adjustments */
     @media (max-width: 768px) {
       .container {
-        padding: 1.5rem;
+        padding: 1.2rem;
         margin: 1rem;
-        border-radius: 15px;
       }
 
       h1 {
-        font-size: 2rem;
+        font-size: 1.8rem;
       }
 
-      .filter-container {
+      .filters {
         flex-direction: column;
+        gap: 0.8rem;
+        padding: 1rem;
       }
 
-      select, input, .search-box {
+      .filters select {
         width: 100%;
-        min-width: auto;
       }
 
       .resources-grid {
         grid-template-columns: 1fr;
       }
-    }
-    .filters {
-  display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
-  margin-bottom: 1.5rem;
-}
-.filters select, .filters label {
-  font-size: 14px;
-}
 
+      .pdf-container {
+        width: 95%;
+        height: 90%;
+      }
+    }
   </style>
 </head>
 <body>
   <div class="container">
     <h1>Study Resources</h1>
+    
     <div class="filters">
-      <label for="branchSelect">Branch:</label>
-      <select id="branchSelect">
-        <option value="">All Branches</option>
-        <% branches.forEach(branch => { %>
-          <option value="<%= branch %>"><%= branch %></option>
-        <% }) %>
-      </select>
+      <div>
+        <label for="yearSelect">Year:</label>
+        <select id="yearSelect">
+          <option value="">All Years</option>
+          <option value="1">1st Year</option>
+          <option value="2">2nd Year</option>
+          <option value="3">3rd Year</option>
+          <option value="4">4th Year</option>
+        </select>
+      </div>
 
-      <label for="yearSelect">Year:</label>
-      <select id="yearSelect">
-        <option value="">All Years</option>
-        <option value="1">1st Year</option>
-        <option value="2">2nd Year</option>
-        <option value="3">3rd Year</option>
-        <option value="4">4th Year</option>
-      </select>
+      <div>
+        <label for="semSelect">Semester:</label>
+        <select id="semSelect">
+          <option value="">All Semesters</option>
+          <option value="1">1st Semester</option>
+          <option value="2">2nd Semester</option>
+        </select>
+      </div>
 
-      <label for="semSelect">Semester:</label>
-      <select id="semSelect">
-        <option value="">All Semesters</option>
-        <option value="1">1st Semester</option>
-        <option value="2">2nd Semester</option>
-      </select>
+      <div>
+        <label for="subjectSelect">Subject:</label>
+        <select id="subjectSelect">
+          <option value="">All Subjects</option>
+          <option value="CP">Computer Programming</option>
+          <option value="CHEMISTRY">Chemistry</option>
+          <option value="M1">Mathematics I</option>
+          <option value="ENGLISH">English</option>
+          <option value="BCME">BCME</option>
+          <option value="PHYSICS">Physics</option>
+          <option value="BEEE">BEEE</option>
+          <option value="M2">Mathematics II</option>
+          <option value="EG">Engineering Graphics</option>
+          <option value="DS">Data Structures</option>
+        </select>
+      </div>
 
-      <label for="subjectSelect">Subject:</label>
-      <select id="subjectSelect">
-        <option value="">All Subjects</option>
-      </select>
+      <div>
+        <label for="unitSelect">Unit:</label>
+        <select id="unitSelect">
+          <option value="">All Units</option>
+          <option value="1">Unit 1</option>
+          <option value="2">Unit 2</option>
+          <option value="3">Unit 3</option>
+          <option value="4">Unit 4</option>
+          <option value="5">Unit 5</option>
+        </select>
+      </div>
     </div>
 
     <h2>PDF Resources</h2>
@@ -454,115 +490,1291 @@
     </div>
 
     <h2>Video Resources</h2>
-    <div class="video-placeholder">
-      <h3>Video Resources <span class="coming-soon">COMING SOON</span></h3>
-      <p>We're working hard to bring you high-quality video tutorials and lectures!</p>
-      <button class="btn btn-outline">
-        <i class="fas fa-bell"></i> Notify Me When Available
-      </button>
+    <div class="empty-state">
+      <i class="fas fa-video"></i>
+      <p>Video resources coming soon!</p>
+    </div>
+  </div>
+
+  <!-- PDF Viewer Modal -->
+  <div class="pdf-modal" id="pdfModal">
+    <div class="pdf-container">
+      <div class="pdf-header">
+        <h3 id="pdfTitle">PDF Viewer</h3>
+        <button class="close-btn" id="closePdf">&times;</button>
+      </div>
+      <div class="pdf-viewer-container">
+        <canvas id="pdfViewer" class="pdf-viewer"></canvas>
+      </div>
+      <div class="pdf-controls">
+        <button id="prevPage">Previous</button>
+        <span class="page-info">Page <span id="currentPage">1</span> of <span id="totalPages">1</span></span>
+        <button id="nextPage">Next</button>
+        <button id="downloadPdf">Download</button>
+      </div>
     </div>
   </div>
 
   <script>
-    const branchSelect = document.getElementById("branchSelect");
+    // Set PDF.js worker path
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.worker.min.js';
+
+    // DOM Elements
     const yearSelect = document.getElementById("yearSelect");
     const semSelect = document.getElementById("semSelect");
     const subjectSelect = document.getElementById("subjectSelect");
+    const unitSelect = document.getElementById("unitSelect");
     const resourcesContainer = document.getElementById("resourcesContainer");
+    
+    // PDF Viewer Elements
+    const pdfModal = document.getElementById("pdfModal");
+    const pdfTitle = document.getElementById("pdfTitle");
+    const pdfViewer = document.getElementById("pdfViewer");
+    const closePdf = document.getElementById("closePdf");
+    const prevPage = document.getElementById("prevPage");
+    const nextPage = document.getElementById("nextPage");
+    const currentPage = document.getElementById("currentPage");
+    const totalPages = document.getElementById("totalPages");
+    const downloadPdf = document.getElementById("downloadPdf");
 
-    function populateDropdown(select, options) {
-      select.innerHTML = '<option value="">All</option>';
-      options.forEach(option => {
-        const opt = document.createElement("option");
-        opt.value = option;
-        opt.textContent = option;
-        select.appendChild(opt);
+    // PDF Viewer State
+    let pdfDoc = null;
+    let pageNum = 1;
+    let pageRendering = false;
+    let pageNumPending = null;
+    let scale = 1.5;
+    let currentPdfUrl = '';
+
+    // Study Resources Data
+    const studyData =[
+  // M1 - Mathematics I
+  {
+    "topic": "M1 - Unit 1",
+    "subject": "M1",
+    "semester": "1",
+    "year": "1",
+    "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
+    "unit": "1",
+    "link": "#",
+    "type": "pdf"
+  },
+  {
+    "topic": "M1 - Unit 2",
+    "subject": "M1",
+    "semester": "1",
+    "year": "1",
+    "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
+    "unit": "2",
+    "link": "#",
+    "type": "pdf"
+  },
+  {
+    "topic": "M1 - Unit 3",
+    "subject": "M1",
+    "semester": "1",
+    "year": "1",
+    "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
+    "unit": "3",
+    "link": "#",
+    "type": "pdf"
+  },
+  {
+    "topic": "M1 - Unit 4",
+    "subject": "M1",
+    "semester": "1",
+    "year": "1",
+    "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
+    "unit": "4",
+    "link": "#",
+    "type": "pdf"
+  },
+  {
+    "topic": "M1 - Unit 5",
+    "subject": "M1",
+    "semester": "1",
+    "year": "1",
+    "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
+    "unit": "5",
+    "link": "#",
+    "type": "pdf"
+  },
+
+  // CHEMISTRY
+  {
+    "topic": "CHEMISTRY - Unit 1",
+    "subject": "CHEMISTRY",
+    "semester": "1",
+    "year": "1",
+    "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
+    "unit": "1",
+    "link": "#",
+    "type": "pdf"
+  },
+  {
+    "topic": "CHEMISTRY - Unit 2",
+    "subject": "CHEMISTRY",
+    "semester": "1",
+    "year": "1",
+    "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
+    "unit": "2",
+    "link": "#",
+    "type": "pdf"
+  },
+  {
+    "topic": "CHEMISTRY - Unit 3",
+    "subject": "CHEMISTRY",
+    "semester": "1",
+    "year": "1",
+    "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
+    "unit": "3",
+    "link": "#",
+    "type": "pdf"
+  },
+  {
+    "topic": "CHEMISTRY - Unit 4",
+    "subject": "CHEMISTRY",
+    "semester": "1",
+    "year": "1",
+    "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
+    "unit": "4",
+    "link": "#",
+    "type": "pdf"
+  },
+  {
+    "topic": "CHEMISTRY - Unit 5",
+    "subject": "CHEMISTRY",
+    "semester": "1",
+    "year": "1",
+    "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
+    "unit": "5",
+    "link": "#",
+    "type": "pdf"
+  },
+
+  // BCME
+  {
+    "topic": "BCME - Unit 1",
+    "subject": "BCME",
+    "semester": "1",
+    "year": "1",
+    "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
+    "unit": "1",
+    "link": "#",
+    "type": "pdf"
+  },
+  {
+    "topic": "BCME - Unit 2",
+    "subject": "BCME",
+    "semester": "1",
+    "year": "1",
+    "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
+    "unit": "2",
+    "link": "#",
+    "type": "pdf"
+  },
+  {
+    "topic": "BCME - Unit 3",
+    "subject": "BCME",
+    "semester": "1",
+    "year": "1",
+    "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
+    "unit": "3",
+    "link": "#",
+    "type": "pdf"
+  },
+  {
+    "topic": "BCME - Unit 4",
+    "subject": "BCME",
+    "semester": "1",
+    "year": "1",
+    "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
+    "unit": "4",
+    "link": "#",
+    "type": "pdf"
+  },
+  {
+    "topic": "BCME - Unit 5",
+    "subject": "BCME",
+    "semester": "1",
+    "year": "1",
+    "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
+    "unit": "5",
+    "link": "#",
+    "type": "pdf"
+  },
+
+  // ENGLISH
+  {
+    "topic": "ENGLISH - Unit 1",
+    "subject": "ENGLISH",
+    "semester": "1",
+    "year": "1",
+    "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
+    "unit": "1",
+    "link": "#",
+    "type": "pdf"
+  },
+  {
+    "topic": "ENGLISH - Unit 2",
+    "subject": "ENGLISH",
+    "semester": "1",
+    "year": "1",
+    "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
+    "unit": "2",
+    "link": "#",
+    "type": "pdf"
+  },
+  {
+    "topic": "ENGLISH - Unit 3",
+    "subject": "ENGLISH",
+    "semester": "1",
+    "year": "1",
+    "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
+    "unit": "3",
+    "link": "#",
+    "type": "pdf"
+  },
+  {
+    "topic": "ENGLISH - Unit 4",
+    "subject": "ENGLISH",
+    "semester": "1",
+    "year": "1",
+    "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
+    "unit": "4",
+    "link": "#",
+    "type": "pdf"
+  },
+  {
+    "topic": "ENGLISH - Unit 5",
+    "subject": "ENGLISH",
+    "semester": "1",
+    "year": "1",
+    "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
+    "unit": "5",
+    "link": "#",
+    "type": "pdf"
+  },
+
+  // CP (Computer Programming)
+  {
+    "topic": "CP - Unit 1",
+    "subject": "CP",
+    "semester": "1",
+    "year": "1",
+    "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
+    "unit": "1",
+    "link": "https://drive.google.com/file/d/1I84yss-R6H1yycevJs4IakOOvJj06tC7/view?usp=sharing",
+    "type": "pdf"
+  },
+  {
+    "topic": "CP - Unit 2",
+    "subject": "CP",
+    "semester": "1",
+    "year": "1",
+    "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
+    "unit": "2",
+    "link": "#",
+    "type": "pdf"
+  },
+  {
+    "topic": "CP - Unit 3",
+    "subject": "CP",
+    "semester": "1",
+    "year": "1",
+    "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
+    "unit": "3",
+    "link": "#",
+    "type": "pdf"
+  },
+  {
+    "topic": "CP - Unit 4",
+    "subject": "CP",
+    "semester": "1",
+    "year": "1",
+    "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
+    "unit": "4",
+    "link": "#",
+    "type": "pdf"
+  },
+  {
+    "topic": "CP - Unit 5",
+    "subject": "CP",
+    "semester": "1",
+    "year": "1",
+    "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
+    "unit": "5",
+    "link": "#",
+    "type": "pdf"
+  },
+
+  // IT WORK SHOP
+  {
+    "topic": "IT WORK SHOP - Unit 1",
+    "subject": "IT WORK SHOP",
+    "semester": "1",
+    "year": "1",
+    "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
+    "unit": "1",
+    "link": "#",
+    "type": "pdf"
+  },
+  {
+    "topic": "IT WORK SHOP - Unit 2",
+    "subject": "IT WORK SHOP",
+    "semester": "1",
+    "year": "1",
+    "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
+    "unit": "2",
+    "link": "#",
+    "type": "pdf"
+  },
+  {
+    "topic": "IT WORK SHOP - Unit 3",
+    "subject": "IT WORK SHOP",
+    "semester": "1",
+    "year": "1",
+    "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
+    "unit": "3",
+    "link": "#",
+    "type": "pdf"
+  },
+  {
+    "topic": "IT WORK SHOP - Unit 4",
+    "subject": "IT WORK SHOP",
+    "semester": "1",
+    "year": "1",
+    "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
+    "unit": "4",
+    "link": "#",
+    "type": "pdf"
+  },
+  {
+    "topic": "IT WORK SHOP - Unit 5",
+    "subject": "IT WORK SHOP",
+    "semester": "1",
+    "year": "1",
+    "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
+    "unit": "5",
+    "link": "#",
+    "type": "pdf"
+  },
+
+  // CHEMISTRY LAB
+  {
+    "topic": "CHEMISTRY LAB - Unit 1",
+    "subject": "CHEMISTRY LAB",
+    "semester": "1",
+    "year": "1",
+    "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
+    "unit": "1",
+    "link": "#",
+    "type": "pdf"
+  },
+  {
+    "topic": "CHEMISTRY LAB - Unit 2",
+    "subject": "CHEMISTRY LAB",
+    "semester": "1",
+    "year": "1",
+    "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
+    "unit": "2",
+    "link": "#",
+    "type": "pdf"
+  },
+  {
+    "topic": "CHEMISTRY LAB - Unit 3",
+    "subject": "CHEMISTRY LAB",
+    "semester": "1",
+    "year": "1",
+    "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
+    "unit": "3",
+    "link": "#",
+    "type": "pdf"
+  },
+  {
+    "topic": "CHEMISTRY LAB - Unit 4",
+    "subject": "CHEMISTRY LAB",
+    "semester": "1",
+    "year": "1",
+    "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
+    "unit": "4",
+    "link": "#",
+    "type": "pdf"
+  },
+  {
+    "topic": "CHEMISTRY LAB - Unit 5",
+    "subject": "CHEMISTRY LAB",
+    "semester": "1",
+    "year": "1",
+    "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
+    "unit": "5",
+    "link": "#",
+    "type": "pdf"
+  },
+
+  // ENGINEERING WORKSHOP
+  {
+    "topic": "ENGINEERING WORKSHOP - Unit 1",
+    "subject": "ENGINEERING WORKSHOP",
+    "semester": "1",
+    "year": "1",
+    "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
+    "unit": "1",
+    "link": "#",
+    "type": "pdf"
+  },
+  {
+    "topic": "ENGINEERING WORKSHOP - Unit 2",
+    "subject": "ENGINEERING WORKSHOP",
+    "semester": "1",
+    "year": "1",
+    "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
+    "unit": "2",
+    "link": "#",
+    "type": "pdf"
+  },
+  {
+    "topic": "ENGINEERING WORKSHOP - Unit 3",
+    "subject": "ENGINEERING WORKSHOP",
+    "semester": "1",
+    "year": "1",
+    "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
+    "unit": "3",
+    "link": "#",
+    "type": "pdf"
+  },
+  {
+    "topic": "ENGINEERING WORKSHOP - Unit 4",
+    "subject": "ENGINEERING WORKSHOP",
+    "semester": "1",
+    "year": "1",
+    "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
+    "unit": "4",
+    "link": "#",
+    "type": "pdf"
+  },
+  {
+    "topic": "ENGINEERING WORKSHOP - Unit 5",
+    "subject": "ENGINEERING WORKSHOP",
+    "semester": "1",
+    "year": "1",
+    "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
+    "unit": "5",
+    "link": "#",
+    "type": "pdf"
+  },
+
+  // CP LAB
+  {
+    "topic": "CP LAB - Unit 1",
+    "subject": "CP LAB",
+    "semester": "1",
+    "year": "1",
+    "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
+    "unit": "1",
+    "link": "#",
+    "type": "pdf"
+  },
+  {
+    "topic": "CP LAB - Unit 2",
+    "subject": "CP LAB",
+    "semester": "1",
+    "year": "1",
+    "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
+    "unit": "2",
+    "link": "#",
+    "type": "pdf"
+  },
+  {
+    "topic": "CP LAB - Unit 3",
+    "subject": "CP LAB",
+    "semester": "1",
+    "year": "1",
+    "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
+    "unit": "3",
+    "link": "#",
+    "type": "pdf"
+  },
+  {
+    "topic": "CP LAB - Unit 4",
+    "subject": "CP LAB",
+    "semester": "1",
+    "year": "1",
+    "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
+    "unit": "4",
+    "link": "#",
+    "type": "pdf"
+  },
+  {
+    "topic": "CP LAB - Unit 5",
+    "subject": "CP LAB",
+    "semester": "1",
+    "year": "1",
+    "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
+    "unit": "5",
+    "link": "#",
+    "type": "pdf"
+  },
+
+  // YOGA & SPORTS
+  {
+    "topic": "YOGA & SPORTS - Unit 1",
+    "subject": "YOGA & SPORTS",
+    "semester": "1",
+    "year": "1",
+    "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
+    "unit": "1",
+    "link": "#",
+    "type": "pdf"
+  },
+  {
+    "topic": "YOGA & SPORTS - Unit 2",
+    "subject": "YOGA & SPORTS",
+    "semester": "1",
+    "year": "1",
+    "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
+    "unit": "2",
+    "link": "#",
+    "type": "pdf"
+  },
+  {
+    "topic": "YOGA & SPORTS - Unit 3",
+    "subject": "YOGA & SPORTS",
+    "semester": "1",
+    "year": "1",
+    "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
+    "unit": "3",
+    "link": "#",
+    "type": "pdf"
+  },
+  {
+    "topic": "YOGA & SPORTS - Unit 4",
+    "subject": "YOGA & SPORTS",
+    "semester": "1",
+    "year": "1",
+    "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
+    "unit": "4",
+    "link": "#",
+    "type": "pdf"
+  },
+  {
+    "topic": "YOGA & SPORTS - Unit 5",
+    "subject": "YOGA & SPORTS",
+    "semester": "1",
+    "year": "1",
+    "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
+    "unit": "5",
+    "link": "#",
+    "type": "pdf"
+  },
+
+  // M2 - Mathematics II
+  {
+    "topic": "M2 - Unit 1",
+    "subject": "M2",
+    "semester": "2",
+    "year": "1",
+    "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
+    "unit": "1",
+    "link": "#",
+    "type": "pdf"
+  },
+  {
+    "topic": "M2 - Unit 2",
+    "subject": "M2",
+    "semester": "2",
+    "year": "1",
+    "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
+    "unit": "2",
+    "link": "#",
+    "type": "pdf"
+  },
+  {
+    "topic": "M2 - Unit 3",
+    "subject": "M2",
+    "semester": "2",
+    "year": "1",
+    "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
+    "unit": "3",
+    "link": "#",
+    "type": "pdf"
+  },
+  {
+    "topic": "M2 - Unit 4",
+    "subject": "M2",
+    "semester": "2",
+    "year": "1",
+    "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
+    "unit": "4",
+    "link": "#",
+    "type": "pdf"
+  },
+  {
+    "topic": "M2 - Unit 5",
+    "subject": "M2",
+    "semester": "2",
+    "year": "1",
+    "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
+    "unit": "5",
+    "link": "#",
+    "type": "pdf"
+  },
+
+  // PHYSICS
+  {
+    "topic": "PHYSICS - Unit 1",
+    "subject": "PHYSICS",
+    "semester": "2",
+    "year": "1",
+    "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
+    "unit": "1",
+    "link": "#",
+    "type": "pdf"
+  },
+  {
+    "topic": "PHYSICS - Unit 2",
+    "subject": "PHYSICS",
+    "semester": "2",
+    "year": "1",
+    "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
+    "unit": "2",
+    "link": "#",
+    "type": "pdf"
+  },
+  {
+    "topic": "PHYSICS - Unit 3",
+    "subject": "PHYSICS",
+    "semester": "2",
+    "year": "1",
+    "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
+    "unit": "3",
+    "link": "#",
+    "type": "pdf"
+  },
+  {
+    "topic": "PHYSICS - Unit 4",
+    "subject": "PHYSICS",
+    "semester": "2",
+    "year": "1",
+    "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
+    "unit": "4",
+    "link": "#",
+    "type": "pdf"
+  },
+  {
+    "topic": "PHYSICS - Unit 5",
+    "subject": "PHYSICS",
+    "semester": "2",
+    "year": "1",
+    "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
+    "unit": "5",
+    "link": "#",
+    "type": "pdf"
+  },
+
+  // BEEE (Basic Electrical and Electronics Engineering)
+  {
+    "topic": "BEEE - Unit 1",
+    "subject": "BEEE",
+    "semester": "2",
+    "year": "1",
+    "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
+    "unit": "1",
+    "link": "#",
+    "type": "pdf"
+  },
+  {
+    "topic": "BEEE - Unit 2",
+    "subject": "BEEE",
+    "semester": "2",
+    "year": "1",
+    "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
+    "unit": "2",
+    "link": "#",
+    "type": "pdf"
+  },
+  {
+    "topic": "BEEE - Unit 3",
+    "subject": "BEEE",
+    "semester": "2",
+    "year": "1",
+    "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
+    "unit": "3",
+    "link": "#",
+    "type": "pdf"
+  },
+  {
+    "topic": "BEEE - Unit 4",
+    "subject": "BEEE",
+    "semester": "2",
+    "year": "1",
+    "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
+    "unit": "4",
+    "link": "#",
+    "type": "pdf"
+  },
+  {
+    "topic": "BEEE - Unit 5",
+    "subject": "BEEE",
+    "semester": "2",
+    "year": "1",
+    "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
+    "unit": "5",
+    "link": "#",
+    "type": "pdf"
+  },
+
+  // CS LAB
+  {
+    "topic": "CS LAB - Unit 1",
+    "subject": "CS LAB",
+    "semester": "2",
+    "year": "1",
+    "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
+    "unit": "1",
+    "link": "#",
+    "type": "pdf"
+  },
+  {
+    "topic": "CS LAB - Unit 2",
+    "subject": "CS LAB",
+    "semester": "2",
+    "year": "1",
+    "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
+    "unit": "2",
+    "link": "#",
+    "type": "pdf"
+  },
+  {
+    "topic": "CS LAB - Unit 3",
+    "subject": "CS LAB",
+    "semester": "2",
+    "year": "1",
+    "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
+    "unit": "3",
+    "link": "#",
+    "type": "pdf"
+  },
+  {
+    "topic": "CS LAB - Unit 4",
+    "subject": "CS LAB",
+    "semester": "2",
+    "year": "1",
+    "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
+    "unit": "4",
+    "link": "#",
+    "type": "pdf"
+  },
+  {
+    "topic": "CS LAB - Unit 5",
+    "subject": "CS LAB",
+    "semester": "2",
+    "year": "1",
+    "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
+    "unit": "5",
+    "link": "#",
+    "type": "pdf"
+  },
+
+  // EG-DRAWING (Engineering Graphics)
+  {
+    "topic": "EG-DRAWING - Unit 1",
+    "subject": "EG-DRAWING",
+    "semester": "2",
+    "year": "1",
+    "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
+    "unit": "1",
+    "link": "#",
+    "type": "pdf"
+  },
+  {
+    "topic": "EG-DRAWING - Unit 2",
+    "subject": "EG-DRAWING",
+    "semester": "2",
+    "year": "1",
+    "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
+    "unit": "2",
+    "link": "#",
+    "type": "pdf"
+  },
+  {
+    "topic": "EG-DRAWING - Unit 3",
+    "subject": "EG-DRAWING",
+    "semester": "2",
+    "year": "1",
+    "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
+    "unit": "3",
+    "link": "#",
+    "type": "pdf"
+  },
+  {
+    "topic": "EG-DRAWING - Unit 4",
+    "subject": "EG-DRAWING",
+    "semester": "2",
+    "year": "1",
+    "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
+    "unit": "4",
+    "link": "#",
+    "type": "pdf"
+  },
+  {
+    "topic": "EG-DRAWING - Unit 5",
+    "subject": "EG-DRAWING",
+    "semester": "2",
+    "year": "1",
+    "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
+    "unit": "5",
+    "link": "#",
+    "type": "pdf"
+  },
+
+  // PHYSICS LAB
+  {
+    "topic": "PHYSICS LAB - Unit 1",
+    "subject": "PHYSICS LAB",
+    "semester": "2",
+    "year": "1",
+    "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
+    "unit": "1",
+    "link": "#",
+    "type": "pdf"
+  },
+  {
+    "topic": "PHYSICS LAB - Unit 2",
+    "subject": "PHYSICS LAB",
+    "semester": "2",
+    "year": "1",
+    "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
+    "unit": "2",
+    "link": "#",
+    "type": "pdf"
+  },
+  {
+    "topic": "PHYSICS LAB - Unit 3",
+    "subject": "PHYSICS LAB",
+    "semester": "2",
+    "year": "1",
+    "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
+    "unit": "3",
+    "link": "#",
+    "type": "pdf"
+  },
+  {
+    "topic": "PHYSICS LAB - Unit 4",
+    "subject": "PHYSICS LAB",
+    "semester": "2",
+    "year": "1",
+    "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
+    "unit": "4",
+    "link": "#",
+    "type": "pdf"
+  },
+  {
+    "topic": "PHYSICS LAB - Unit 5",
+    "subject": "PHYSICS LAB",
+    "semester": "2",
+    "year": "1",
+    "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
+    "unit": "5",
+    "link": "#",
+    "type": "pdf"
+  },
+
+  // BEEE LAB
+  {
+    "topic": "BEEE LAB - Unit 1",
+    "subject": "BEEE LAB",
+    "semester": "2",
+    "year": "1",
+    "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
+    "unit": "1",
+    "link": "#",
+    "type": "pdf"
+  },
+  {
+    "topic": "BEEE LAB - Unit 2",
+    "subject": "BEEE LAB",
+    "semester": "2",
+    "year": "1",
+    "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
+    "unit": "2",
+    "link": "#",
+    "type": "pdf"
+  },
+  {
+    "topic": "BEEE LAB - Unit 3",
+    "subject": "BEEE LAB",
+    "semester": "2",
+    "year": "1",
+    "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
+    "unit": "3",
+    "link": "#",
+    "type": "pdf"
+  },
+  {
+    "topic": "BEEE LAB - Unit 4",
+    "subject": "BEEE LAB",
+    "semester": "2",
+    "year": "1",
+    "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
+    "unit": "4",
+    "link": "#",
+    "type": "pdf"
+  },
+  {
+    "topic": "BEEE LAB - Unit 5",
+    "subject": "BEEE LAB",
+    "semester": "2",
+    "year": "1",
+    "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
+    "unit": "5",
+    "link": "#",
+    "type": "pdf"
+  },
+
+  // DS (Data Structures)
+  {
+    "topic": "DS - Unit 1",
+    "subject": "DS",
+    "semester": "2",
+    "year": "1",
+    "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
+    "unit": "1",
+    "link": "#",
+    "type": "pdf"
+  },
+  {
+    "topic": "DS - Unit 2",
+    "subject": "DS",
+    "semester": "2",
+    "year": "1",
+    "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
+    "unit": "2",
+    "link": "#",
+    "type": "pdf"
+  },
+  {
+    "topic": "DS - Unit 3",
+    "subject": "DS",
+    "semester": "2",
+    "year": "1",
+    "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
+    "unit": "3",
+    "link": "#",
+    "type": "pdf"
+  },
+  {
+    "topic": "DS - Unit 4",
+    "subject": "DS",
+    "semester": "2",
+    "year": "1",
+    "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
+    "unit": "4",
+    "link": "#",
+    "type": "pdf"
+  },
+  {
+    "topic": "DS - Unit 5",
+    "subject": "DS",
+    "semester": "2",
+    "year": "1",
+    "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
+    "unit": "5",
+    "link": "#",
+    "type": "pdf"
+  },
+
+  // DS LAB (Data Structures Lab)
+  {
+    "topic": "DS LAB - Unit 1",
+    "subject": "DS LAB",
+    "semester": "2",
+    "year": "1",
+    "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
+    "unit": "1",
+    "link": "#",
+    "type": "pdf"
+  },
+  {
+    "topic": "DS LAB - Unit 2",
+    "subject": "DS LAB",
+    "semester": "2",
+    "year": "1",
+    "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
+    "unit": "2",
+    "link": "#",
+    "type": "pdf"
+  },
+  {
+    "topic": "DS LAB - Unit 3",
+    "subject": "DS LAB",
+    "semester": "2",
+    "year": "1",
+    "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
+    "unit": "3",
+    "link": "#",
+    "type": "pdf"
+  },
+  {
+    "topic": "DS LAB - Unit 4",
+    "subject": "DS LAB",
+    "semester": "2",
+    "year": "1",
+    "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
+    "unit": "4",
+    "link": "#",
+    "type": "pdf"
+  },
+  {
+    "topic": "DS LAB - Unit 5",
+    "subject": "DS LAB",
+    "semester": "2",
+    "year": "1",
+    "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
+    "unit": "5",
+    "link": "#",
+    "type": "pdf"
+  },
+
+  // NSS
+  {
+    "topic": "NSS - Unit 1",
+    "subject": "NSS",
+    "semester": "2",
+    "year": "1",
+    "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
+    "unit": "1",
+    "link": "#",
+    "type": "pdf"
+  },
+  {
+    "topic": "NSS - Unit 2",
+    "subject": "NSS",
+    "semester": "2",
+    "year": "1",
+    "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
+    "unit": "2",
+    "link": "#",
+    "type": "pdf"
+  },
+  {
+    "topic": "NSS - Unit 3",
+    "subject": "NSS",
+    "semester": "2",
+    "year": "1",
+    "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
+    "unit": "3",
+    "link": "#",
+    "type": "pdf"
+  },
+  {
+    "topic": "NSS - Unit 4",
+    "subject": "NSS",
+    "semester": "2",
+    "year": "1",
+    "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
+    "unit": "4",
+    "link": "#",
+    "type": "pdf"
+  },
+  {
+    "topic": "NSS - Unit 5",
+    "subject": "NSS",
+    "semester": "2",
+    "year": "1",
+    "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
+    "unit": "5",
+    "link": "#",
+    "type": "pdf"
+  }
+];
+
+    // Render PDF page
+    function renderPage(num) {
+      pageRendering = true;
+      pdfDoc.getPage(num).then(function(page) {
+        const viewport = page.getViewport({ scale: scale });
+        pdfViewer.height = viewport.height;
+        pdfViewer.width = viewport.width;
+
+        const renderContext = {
+          canvasContext: pdfViewer.getContext('2d'),
+          viewport: viewport
+        };
+
+        const renderTask = page.render(renderContext);
+
+        renderTask.promise.then(function() {
+          pageRendering = false;
+          currentPage.textContent = num;
+          
+          if (pageNumPending !== null) {
+            renderPage(pageNumPending);
+            pageNumPending = null;
+          }
+        });
       });
     }
 
-    function getUniqueValues(data, key) {
-      return [...new Set(data.map(item => item[key]).filter(Boolean))];
+    // Go to previous page
+    function onPrevPage() {
+      if (pageNum <= 1) return;
+      pageNum--;
+      queueRenderPage(pageNum);
     }
 
-    populateDropdown(branchSelect, getUniqueValues(studyData, "branch"));
-    populateDropdown(yearSelect, getUniqueValues(studyData, "year"));
-    populateDropdown(semSelect, getUniqueValues(studyData, "semester"));
+    // Go to next page
+    function onNextPage() {
+      if (pageNum >= pdfDoc.numPages) return;
+      pageNum++;
+      queueRenderPage(pageNum);
+    }
 
-    function updateFilters() {
-      const branch = branchSelect.value;
-      const year = yearSelect.value;
-      const sem = semSelect.value;
+    // Queue page rendering
+    function queueRenderPage(num) {
+      if (pageRendering) {
+        pageNumPending = num;
+      } else {
+        renderPage(num);
+      }
+    }
 
-      const filteredSubjects = [...new Set(
-        studyData
-          .filter(item =>
-            (!branch || item.branch === branch) &&
-            (!year || item.year === year) &&
-            (!sem || item.semester === sem)
-          )
-          .map(item => item.subject)
-          .filter(Boolean)
-      )];
-
-      subjectSelect.innerHTML = '<option value="">All Subjects</option>';
-      filteredSubjects.forEach(subject => {
-        const option = document.createElement("option");
-        option.value = subject;
-        option.textContent = subject;
-        subjectSelect.appendChild(option);
+    // Open PDF in modal
+    function openPdf(title, url) {
+      pdfTitle.textContent = title;
+      currentPdfUrl = url;
+      pdfModal.classList.add('active');
+      
+      // Load the PDF
+      pdfjsLib.getDocument(url).promise.then(function(pdf) {
+        pdfDoc = pdf;
+        totalPages.textContent = pdf.numPages;
+        pageNum = 1;
+        renderPage(pageNum);
+      }).catch(function(error) {
+        console.error('PDF loading error:', error);
+        alert('Failed to load PDF. Please try again or download the file.');
       });
-
-      renderResources();
     }
 
-    function renderResources() {
-      const branch = branchSelect.value;
+    // Close PDF modal
+    function closePdfViewer() {
+      pdfModal.classList.remove('active');
+      if (pdfDoc) {
+        pdfDoc.destroy();
+        pdfDoc = null;
+      }
+    }
+
+    // Download PDF
+    function downloadCurrentPdf() {
+      if (!currentPdfUrl) return;
+      
+      const a = document.createElement('a');
+      a.href = currentPdfUrl;
+      a.download = pdfTitle.textContent + '.pdf';
+      a.target = '_blank';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+
+    // Event listeners for PDF viewer
+    closePdf.addEventListener('click', closePdfViewer);
+    prevPage.addEventListener('click', onPrevPage);
+    nextPage.addEventListener('click', onNextPage);
+    downloadPdf.addEventListener('click', downloadCurrentPdf);
+
+    // Close modal when clicking outside
+    pdfModal.addEventListener('click', function(e) {
+      if (e.target === pdfModal) {
+        closePdfViewer();
+      }
+    });
+
+    // Filter resources based on selections
+    function filterResources() {
       const year = yearSelect.value;
       const sem = semSelect.value;
       const subject = subjectSelect.value;
+      const unit = unitSelect.value;
 
+      // Filter resources
       const filtered = studyData.filter(item =>
-        (!branch || item.branch === branch) &&
         (!year || item.year === year) &&
         (!sem || item.semester === sem) &&
-        (!subject || item.subject === subject)
+        (!subject || item.subject === subject) &&
+        (!unit || item.unit === unit)
       );
 
+      renderResources(filtered);
+    }
+
+    // Render filtered resources
+    function renderResources(resources) {
       resourcesContainer.innerHTML = "";
 
-      if (filtered.length === 0) {
-        resourcesContainer.innerHTML = "<p>No matching resources found.</p>";
+      if (resources.length === 0) {
+        resourcesContainer.innerHTML = `
+          <div class="empty-state">
+            <i class="fas fa-search"></i>
+            <p>No resources match your selected filters</p>
+            <p class="note">Try adjusting your filters</p>
+          </div>
+        `;
         return;
       }
 
-      filtered.forEach(item => {
+      resources.forEach((item, index) => {
         const card = document.createElement("div");
         card.className = "resource-card";
+        card.style.setProperty('--delay', index % 10); // Stagger animations
 
         card.innerHTML = `
           <h3>${item.topic}</h3>
           <div class="meta">
+            <span><i class="fas fa-calendar-alt"></i> Year ${item.year}</span>
             <span><i class="fas fa-book"></i> ${item.subject}</span>
-            <span><i class="fas fa-code-branch"></i> ${item.branch}</span>
-            <span><i class="fas fa-calendar-alt"></i> Year ${item.year}, Sem ${item.semester}</span>
+            <span><i class="fas fa-clock"></i> Sem ${item.semester}</span>
+            <span><i class="fas fa-layer-group"></i> Unit ${item.unit}</span>
           </div>
           <div class="actions">
-            <a class="btn btn-primary" href="${item.link}" target="_blank">
-              <i class="fas fa-file-pdf"></i> Open PDF
+            <button class="btn btn-primary view-pdf" data-title="${item.topic}" data-url="${item.link}">
+              <i class="fas fa-eye"></i> View
+            </button>
+            <a href="${item.link}" target="_blank" class="btn btn-outline">
+              <i class="fas fa-download"></i> Download
             </a>
           </div>
         `;
 
         resourcesContainer.appendChild(card);
       });
+
+      // Add event listeners to view buttons
+      document.querySelectorAll('.view-pdf').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const title = this.getAttribute('data-title');
+          const url = this.getAttribute('data-url');
+          openPdf(title, url);
+        });
+      });
     }
 
-    branchSelect.addEventListener("change", updateFilters);
-    yearSelect.addEventListener("change", updateFilters);
-    semSelect.addEventListener("change", updateFilters);
-    subjectSelect.addEventListener("change", renderResources);
+    // Event listeners for filters
+    yearSelect.addEventListener("change", filterResources);
+    semSelect.addEventListener("change", filterResources);
+    subjectSelect.addEventListener("change", filterResources);
+    unitSelect.addEventListener("change", filterResources);
 
-    updateFilters();
+    // Initialize with all resources
+    filterResources();
+
+    // Handle window resize for PDF viewer
+    window.addEventListener('resize', function() {
+      if (pdfModal.classList.contains('active') && pdfDoc) {
+        queueRenderPage(pageNum);
+      }
+    });
   </script>
 </body>
 </html>
