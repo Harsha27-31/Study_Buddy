@@ -33,6 +33,7 @@ const storage = multer.diskStorage({
   }
 });
 
+// Enhanced file filter for uploads
 const fileFilter = (req, file, cb) => {
   const filetypes = /pdf|jpeg|jpg|png|txt/;
   const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
@@ -41,14 +42,68 @@ const fileFilter = (req, file, cb) => {
   if (extname && mimetype) {
     cb(null, true);
   } else {
-    cb(new Error('Only PDF, images (JPEG, JPG, PNG), and text files are allowed!'));
+    cb(new Error('Only PDF, images (JPEG, JPG, PNG), and text files are allowed!'), false);
   }
 };
+// Add at the top of your file
+const requiredEnvVars = ['MONGO_URL', 'EMAIL', 'EMAIL_PASS'];
+requiredEnvVars.forEach(env => {
+  if (!process.env[env]) {
+    console.error(`❌ Missing required environment variable: ${env}`);
+    process.exit(1);
+  }
+});
+// In your server file (e.g., app.js or routes file)
 
-const upload = multer({ 
-  storage,
-  limits: { fileSize: 10 * 1024 * 1024 }, // 10MB
-  fileFilter
+
+const upload = multer({
+    dest: 'public/uploads/avatars/',
+    limits: { fileSize: 2 * 1024 * 1024 }, // 2MB limit
+    fileFilter: (req, file, cb) => {
+        const filetypes = /jpeg|jpg|png|gif/;
+        const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+        const mimetype = filetypes.test(file.mimetype);
+        
+        if (mimetype && extname) {
+            return cb(null, true);
+        } else {
+            cb('Error: Images only!');
+        }
+    }
+});
+
+// Improved avatar upload route
+app.post('/upload-avatar', upload.single('avatar'), async (req, res) => {
+  try {
+      if (!req.user) {
+          return res.status(401).json({ success: false, message: 'Unauthorized' });
+      }
+
+      if (!req.file) {
+          return res.status(400).json({ success: false, message: 'No file uploaded' });
+      }
+
+      // Delete old avatar if exists
+      const user = await User.findById(req.user._id);
+      if (user.avatar) {
+          const oldAvatarPath = path.join(__dirname, 'public', user.avatar);
+          if (fs.existsSync(oldAvatarPath)) {
+              fs.unlinkSync(oldAvatarPath);
+          }
+      }
+
+      // Update user's avatar in database
+      const avatarPath = `/uploads/avatars/${req.file.filename}`;
+      await User.findByIdAndUpdate(req.user._id, { avatar: avatarPath });
+
+      res.json({ 
+          success: true,
+          avatarUrl: avatarPath
+      });
+  } catch (error) {
+      console.error('Avatar upload error:', error);
+      res.status(500).json({ success: false, message: 'Error uploading avatar' });
+  }
 });
 
 app.set('view engine', 'ejs');
@@ -66,20 +121,40 @@ app.use((req, res, next) => {
   next();
 });
 
-// MongoDB Connection
-mongoose
-  .connect(process.env.MONGO_URL)
-  .then(() => console.log('✅ MongoDB Connected'))
-  .catch((err) => console.error(err));
+// Enhanced MongoDB connection
+mongoose.connect(process.env.MONGO_URL, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  serverSelectionTimeoutMS: 5000,
+  socketTimeoutMS: 45000
+})
+.then(() => console.log('✅ MongoDB Connected'))
+.catch(err => {
+  console.error('❌ MongoDB Connection Error:', err);
+  process.exit(1);
+});
+
+mongoose.connection.on('error', err => {
+  console.error('MongoDB connection error:', err);
+});
 
 // Session Setup
+// Update session config for better security
 app.use(
   session({
-    secret: process.env.SESSION_SECRET || 'secretkey',
+    secret: process.env.SESSION_SECRET || crypto.randomBytes(32).toString('hex'),
     resave: false,
     saveUninitialized: false,
-    store: MongoStore.create({ mongoUrl: process.env.MONGO_URL }),
-    cookie: { maxAge: 1000 * 60 * 60 * 24 }, // 1 day
+    store: MongoStore.create({ 
+      mongoUrl: process.env.MONGO_URL,
+      ttl: 24 * 60 * 60 // 1 day
+    }),
+    cookie: { 
+      maxAge: 1000 * 60 * 60 * 24, // 1 day
+      secure: process.env.NODE_ENV === 'production',
+      httpOnly: true,
+      sameSite: 'strict'
+    }
   })
 );
 
@@ -257,7 +332,20 @@ app.get('/profile', async (req, res) => {
     });
   }
 });
-
+// app.get('/profile', (req, res) => {
+//   // Assuming you have user data in req.user or from session
+//   res.render('profile', {
+//       user: {
+//           name: req.user.fullName,
+//           email: req.user.email,
+//           role: req.user.role || 'Student',
+//           joinDate: req.user.createdAt.toLocaleDateString(),
+//           // location: req.user.location || 'Not specified',
+//           // accountType: req.user.accountType || 'Standard',
+//           // institution: req.user.institution || 'Not specified'
+//       }
+//   });
+// });
 // Settings Route
 app.get('/settings', async (req, res) => {
   try {
@@ -893,14 +981,36 @@ app.get('/api/pdf-proxy', async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch PDF' });
   }
 });
+// Add helmet for security headers
+const helmet = require('helmet');
+app.use(helmet());
 
+// Add rate limiting
+const rateLimit = require('express-rate-limit');
+const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100 // limit each IP to 100 requests per windowMs
+});
+app.use('/api/', limiter);
 // ======================== ERROR HANDLERS ========================
 
 app.use((err, req, res, next) => {
   console.error(err.stack);
+  
+  // Handle multer errors specifically
+  if (err instanceof multer.MulterError) {
+      return res.status(400).json({ 
+          success: false,
+          error: err.message 
+      });
+  }
+  
+  // Handle other errors
   res.status(500).render('error', {
-    user: req.session.user || null,
-    error: err
+      user: req.session.user || null,
+      error: process.env.NODE_ENV === 'development' ? err : 'Something went wrong!',
+      redirectUrl: '/home',
+      redirectText: 'Back to Home'
   });
 });
 
@@ -908,6 +1018,14 @@ app.use((req, res) => {
   res.status(404).render('404', {
     user: req.session.user || null,
     message: 'Page not found'
+  });
+});
+app.get('/health', (req, res) => {
+  res.status(200).json({
+    status: 'OK',
+    timestamp: new Date(),
+    dbStatus: mongoose.connection.readyState === 1 ? 'connected' : 'disconnected',
+    memoryUsage: process.memoryUsage()
   });
 });
 
