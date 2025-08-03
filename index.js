@@ -14,6 +14,8 @@ const User = require('./MODELS/User');
 const List = require('./MODELS/List');
 const Resource = require('./MODELS/Resource'); 
 const Upload = require('./MODELS/Upload');
+const Syllabus = require('./MODELS/Syllabus');
+const ModelPaper = require('./MODELS/ModelPaper');
 dotenv.config();
 
 const app = express();
@@ -32,7 +34,49 @@ const storage = multer.diskStorage({
     cb(null, Date.now() + path.extname(file.originalname));
   }
 });
+exports.getSyllabus = async (req, res) => {
+  try {
+    const { year, semester, subject, branch } = req.query;
+    
+    const filter = {};
+    if (year) filter.year = year;
+    if (semester) filter.semester = semester;
+    if (subject) filter.subject = subject;
+    if (branch) filter.branch = branch;
+    
+    const syllabus = await Syllabus.find(filter).sort({ createdAt: -1 });
+    
+    res.render('syllabus', { 
+      title: 'University Syllabus',
+      syllabus,
+      filters: { year, semester, subject, branch }
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).render('error', { message: 'Server Error' });
+  }
+};
 
+exports.addSyllabus = async (req, res) => {
+  try {
+    const { title, subject, semester, year, branch, link } = req.body;
+    
+    const newSyllabus = new Syllabus({
+      title,
+      subject,
+      semester,
+      year,
+      branch: Array.isArray(branch) ? branch : [branch],
+      link
+    });
+    
+    await newSyllabus.save();
+    res.redirect('/syllabus');
+  } catch (err) {
+    console.error(err);
+    res.status(500).render('error', { message: 'Failed to add syllabus' });
+  }
+};
 // Enhanced file filter for uploads
 const fileFilter = (req, file, cb) => {
   const filetypes = /pdf|jpeg|jpg|png|txt/;
@@ -73,40 +117,51 @@ const upload = multer({
 });
 
 // Improved avatar upload route
+// Improved avatar upload route - FIXED VERSION
 app.post('/upload-avatar', upload.single('avatar'), async (req, res) => {
   try {
-      if (!req.user) {
-          return res.status(401).json({ success: false, message: 'Unauthorized' });
+    if (!req.session.userId) {  // Changed from req.user to req.session.userId
+      return res.status(401).json({ success: false, message: 'Unauthorized' });
+    }
+
+    if (!req.file) {
+      return res.status(400).json({ success: false, message: 'No file uploaded' });
+    }
+
+    // Delete old avatar if exists
+    const user = await User.findById(req.session.userId);  // Use session userId
+    if (!user) {
+      return res.status(404).json({ success: false, message: 'User not found' });
+    }
+
+    if (user.avatar) {
+      const oldAvatarPath = path.join(__dirname, 'public', user.avatar);
+      if (fs.existsSync(oldAvatarPath)) {
+        fs.unlinkSync(oldAvatarPath);
       }
+    }
 
-      if (!req.file) {
-          return res.status(400).json({ success: false, message: 'No file uploaded' });
-      }
+    // Update user's avatar in database
+    const avatarPath = `/uploads/avatars/${req.file.filename}`;
+    await User.findByIdAndUpdate(req.session.userId, { avatar: avatarPath });
 
-      // Delete old avatar if exists
-      const user = await User.findById(req.user._id);
-      if (user.avatar) {
-          const oldAvatarPath = path.join(__dirname, 'public', user.avatar);
-          if (fs.existsSync(oldAvatarPath)) {
-              fs.unlinkSync(oldAvatarPath);
-          }
-      }
+    // Update session user data if needed
+    if (req.session.user) {
+      req.session.user.avatar = avatarPath;
+    }
 
-      // Update user's avatar in database
-      const avatarPath = `/uploads/avatars/${req.file.filename}`;
-      await User.findByIdAndUpdate(req.user._id, { avatar: avatarPath });
-
-      res.json({ 
-          success: true,
-          avatarUrl: avatarPath
-      });
+    res.json({ 
+      success: true,
+      avatarUrl: avatarPath
+    });
   } catch (error) {
-      console.error('Avatar upload error:', error);
-      res.status(500).json({ success: false, message: 'Error uploading avatar' });
+    console.error('Avatar upload error:', error);
+    res.status(500).json({ success: false, message: 'Error uploading avatar' });
   }
 });
 
 app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
 app.use(express.static('public'));
 app.use('/upload', express.static(uploadDir));
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -114,6 +169,7 @@ app.use(bodyParser.json());
 
 // CORS middleware
 // Update CORS middleware to allow PDF.js worker
+
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Range');
@@ -123,8 +179,6 @@ app.use((req, res, next) => {
 
 // Enhanced MongoDB connection
 mongoose.connect(process.env.MONGO_URL, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
   serverSelectionTimeoutMS: 5000,
   socketTimeoutMS: 45000
 })
@@ -157,6 +211,11 @@ app.use(
     }
   })
 );
+
+app.use((req, res, next) => {
+  res.locals.user = req.session.user || null;
+  next();
+});
 
 // Add formatDate helper to all templates
 app.locals.formatDate = (date) => {
@@ -572,8 +631,123 @@ app.use('/upload', (req, res, next) => {
   }
   next();
 });
-app.get('/model-papers', (req, res) => {
-  res.render('modelpapers')
+// ======================== SYLLABUS ROUTES ========================
+
+app.get('/syllabus', async (req, res) => {
+  try {
+    if (!req.session.userId) return res.redirect('/login');
+    
+    const { year, semester, subject, branch } = req.query;
+    
+    const filter = {};
+    if (year) filter.year = year;
+    if (semester) filter.semester = semester;
+    if (subject) filter.subject = subject;
+    if (branch) filter.branch = branch;
+    
+    const syllabus = await Syllabus.find(filter).sort({ createdAt: -1 });
+    
+    res.render('syllabus', { 
+      title: 'University Syllabus',
+      syllabus,
+      filters: { year, semester, subject, branch },
+      user: req.session.user || null
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).render('error', { 
+      message: 'Server Error',
+      user: req.session.user || null
+    });
+  }
+});
+
+app.post('/syllabus', async (req, res) => {
+  try {
+    if (!req.session.userId) return res.redirect('/login');
+    
+    const { title, subject, semester, year, branch, link } = req.body;
+    
+    const newSyllabus = new Syllabus({
+      title,
+      subject,
+      semester,
+      year,
+      branch: Array.isArray(branch) ? branch : [branch],
+      link,
+      addedBy: req.session.userId
+    });
+    
+    await newSyllabus.save();
+    res.redirect('/syllabus');
+  } catch (err) {
+    console.error(err);
+    res.status(500).render('error', { 
+      message: 'Failed to add syllabus',
+      user: req.session.user || null
+    });
+  }
+});
+
+// ======================== MODEL PAPER ROUTES ========================
+
+app.get('/modelpapers', async (req, res) => {
+  try {
+    if (!req.session.userId) return res.redirect('/login');
+    
+    const { year, semester, subject, branch, examType } = req.query;
+    
+    const filter = {};
+    if (year) filter.year = year;
+    if (semester) filter.semester = semester;
+    if (subject) filter.subject = subject;
+    if (branch) filter.branch = branch;
+    if (examType) filter.examType = examType;
+    
+    const papers = await ModelPaper.find(filter).sort({ yearOfExam: -1, createdAt: -1 });
+    
+    res.render('modelpapers', { 
+      title: 'Model Question Papers',
+      papers,
+      filters: { year, semester, subject, branch, examType },
+      user: req.session.user || null
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).render('error', { 
+      message: 'Server Error',
+      user: req.session.user || null
+    });
+  }
+});
+
+app.post('/modelpapers', async (req, res) => {
+  try {
+    if (!req.session.userId) return res.redirect('/login');
+    
+    const { title, subject, semester, year, branch, examType, yearOfExam, link } = req.body;
+    
+    const newPaper = new ModelPaper({
+      title,
+      subject,
+      semester,
+      year,
+      branch: Array.isArray(branch) ? branch : [branch],
+      examType,
+      yearOfExam,
+      link,
+      addedBy: req.session.userId
+    });
+    
+    await newPaper.save();
+    res.redirect('/modelpapers');
+  } catch (err) {
+    console.error(err);
+    res.status(500).render('error', { 
+      message: 'Failed to add model paper',
+      user: req.session.user || null
+    });
+  }
 });
 app.get('/help', (req, res) => {
   res.render('help'); // Render your help page
@@ -616,7 +790,15 @@ app.post('/api/support', async (req, res) => {
     res.status(500).json({ success: false, message: 'Error processing request' });
   }
 });
-
+app.get('/view-pdf', (req, res) => {
+  const { url } = req.query;
+  if (!url) return res.status(400).send('PDF URL is required');
+  
+  res.render('pdf-viewer', { 
+    pdfUrl: url,
+    user: req.session.user || null 
+  });
+});
 // ======================== UPLOAD ROUTES ========================
 
 app.get('/upload', async (req, res) => {

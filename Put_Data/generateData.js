@@ -23,7 +23,7 @@ selectedBranches.forEach(branch => {
           subject,
           unit,
           topic: `${subject} - ${unit}`,
-          link: "https://drive.google.com/drive/folders/1jY_z1WRndqeUawh99HzyMsRk8y4XwbZN?usp=sharing",
+          link: "https://drive.google.com/file/d/109OYGdzd6YZqAQg_DhySZOyyFAU27cVr/view?usp=sharing",
           addedBy
         });
       });

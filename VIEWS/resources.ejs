@@ -7,22 +7,22 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.min.js"></script>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
-
+    /* CSS Variables */
     :root {
       --primary: #5e35b1;
       --secondary: #4527a0;
       --accent: #7c4dff;
       --light: #f5f3ff;
       --dark: #1a237e;
-      --success: #26a69a;
-      --warning: #ff7043;
       --card-bg: #ffffff;
       --shadow-sm: 0 1px 3px rgba(0,0,0,0.12);
       --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
       --shadow-lg: 0 10px 25px rgba(0,0,0,0.1);
+      --border-radius: 8px;
+      --transition: all 0.3s ease;
     }
 
+    /* Base Styles */
     * {
       box-sizing: border-box;
       margin: 0;
@@ -34,37 +34,21 @@
       background: linear-gradient(135deg, #f3e5f5 0%, #e8eaf6 100%);
       color: var(--dark);
       min-height: 100vh;
-      overflow-x: hidden;
+      line-height: 1.6;
     }
 
-    .container {
-      max-width: 1200px;
-      margin: 2rem auto;
-      padding: 2rem;
-      background: var(--card-bg);
-      border-radius: 12px;
-      box-shadow: var(--shadow-lg);
-      transform: translateY(20px);
-      opacity: 0;
-      animation: fadeInUp 0.6s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
-    }
-
-    @keyframes fadeInUp {
-      to {
-        transform: translateY(0);
-        opacity: 1;
-      }
+    /* Typography */
+    h1, h2, h3 {
+      color: var(--primary);
+      font-weight: 600;
     }
 
     h1 {
-      text-align: center;
       font-size: 2.5rem;
+      text-align: center;
       margin-bottom: 1.5rem;
-      color: var(--primary);
       position: relative;
       display: inline-block;
-      left: 50%;
-      transform: translateX(-50%);
     }
 
     h1::after {
@@ -76,79 +60,12 @@
       height: 4px;
       background: linear-gradient(90deg, var(--primary), var(--accent));
       border-radius: 2px;
-      transform: scaleX(0);
-      transform-origin: left;
-      animation: underlineExpand 1.2s ease-out 0.5s forwards;
-    }
-
-    @keyframes underlineExpand {
-      to {
-        transform: scaleX(1);
-      }
-    }
-
-    .filters {
-      display: flex;
-      gap: 1rem;
-      flex-wrap: wrap;
-      margin-bottom: 2rem;
-      background: rgba(255,255,255,0.9);
-      padding: 1.5rem;
-      border-radius: 10px;
-      box-shadow: var(--shadow-sm);
-      animation: slideInDown 0.5s ease-out;
-    }
-
-    @keyframes slideInDown {
-      from {
-        transform: translateY(-20px);
-        opacity: 0;
-      }
-      to {
-        transform: translateY(0);
-        opacity: 1;
-      }
-    }
-
-    .filters label {
-      font-weight: 500;
-      color: var(--dark);
-      margin-right: 0.5rem;
-      font-size: 0.9rem;
-    }
-
-    .filters select {
-      padding: 0.7rem 1rem;
-      border: 2px solid #d1c4e9;
-      border-radius: 8px;
-      font-size: 0.9rem;
-      background: white;
-      outline: none;
-      transition: all 0.3s ease;
-      min-width: 180px;
-    }
-
-    .filters select:focus {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(124, 77, 255, 0.2);
     }
 
     h2 {
-      margin: 2rem 0 1rem;
-      color: var(--primary);
       font-size: 1.6rem;
+      margin: 2rem 0 1rem;
       position: relative;
-      display: inline-block;
-      opacity: 0;
-      transform: translateX(-20px);
-      animation: slideIn 0.6s ease-out 0.4s forwards;
-    }
-
-    @keyframes slideIn {
-      to {
-        opacity: 1;
-        transform: translateX(0);
-      }
     }
 
     h2::after {
@@ -159,9 +76,57 @@
       width: 50px;
       height: 3px;
       background: var(--accent);
-      border-radius: 2px;
     }
 
+    /* Layout Components */
+    .container {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 2rem;
+      background: var(--card-bg);
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .filters {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-bottom: 2rem;
+      background: rgba(255,255,255,0.9);
+      padding: 1.5rem;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .filter-group {
+      min-width: 180px;
+    }
+
+    label {
+      display: block;
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+      color: var(--dark);
+    }
+
+    select {
+      width: 100%;
+      padding: 0.7rem 1rem;
+      border: 2px solid #d1c4e9;
+      border-radius: var(--border-radius);
+      font-size: 0.9rem;
+      background: white;
+      outline: none;
+      transition: var(--transition);
+    }
+
+    select:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(124, 77, 255, 0.2);
+    }
+
+    /* Resources Grid */
     .resources-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -171,26 +136,15 @@
 
     .resource-card {
       background: white;
-      border-radius: 10px;
+      border-radius: var(--border-radius);
       padding: 1.5rem;
       box-shadow: var(--shadow-md);
-      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      transition: var(--transition);
       border: 1px solid #e1bee7;
-      opacity: 0;
-      transform: translateY(20px);
-      animation: cardAppear 0.5s ease-out forwards;
-      animation-delay: calc(var(--delay) * 0.1s);
-    }
-
-    @keyframes cardAppear {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
     }
 
     .resource-card:hover {
-      transform: translateY(-5px) !important;
+      transform: translateY(-5px);
       box-shadow: var(--shadow-lg);
       border-color: var(--accent);
     }
@@ -198,43 +152,41 @@
     .resource-card h3 {
       margin: 0 0 0.8rem;
       font-size: 1.2rem;
-      color: var(--dark);
-      font-weight: 600;
     }
 
-    .resource-card .meta {
+    .meta {
       display: flex;
       gap: 0.8rem;
       margin-bottom: 1rem;
-      font-size: 0.85rem;
-      color: #5e35b1;
       flex-wrap: wrap;
     }
 
-    .resource-card .meta span {
+    .meta span {
       display: flex;
       align-items: center;
       gap: 0.3rem;
       background: #ede7f6;
       padding: 0.3rem 0.8rem;
       border-radius: 20px;
+      font-size: 0.85rem;
     }
 
-    .resource-card .actions {
+    .actions {
       display: flex;
       gap: 0.8rem;
       margin-top: 1.2rem;
     }
 
+    /* Buttons */
     .btn {
       padding: 0.6rem 1.2rem;
-      border-radius: 8px;
+      border-radius: var(--border-radius);
       font-weight: 500;
       display: inline-flex;
       align-items: center;
       gap: 0.5rem;
       cursor: pointer;
-      transition: all 0.2s ease;
+      transition: var(--transition);
       text-decoration: none;
       border: none;
       font-size: 0.9rem;
@@ -261,12 +213,11 @@
       transform: translateY(-2px);
     }
 
+    /* Empty State */
     .empty-state {
       text-align: center;
       padding: 2rem;
       color: #7e57c2;
-      font-size: 1rem;
-      animation: fadeIn 0.5s ease;
       grid-column: 1 / -1;
     }
 
@@ -278,12 +229,8 @@
     }
 
     @keyframes float {
-      0%, 100% {
-        transform: translateY(0);
-      }
-      50% {
-        transform: translateY(-8px);
-      }
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
     }
 
     /* PDF Viewer Modal */
@@ -300,7 +247,7 @@
       z-index: 1000;
       opacity: 0;
       visibility: hidden;
-      transition: all 0.3s ease;
+      transition: var(--transition);
     }
 
     .pdf-modal.active {
@@ -312,17 +259,11 @@
       width: 85%;
       height: 85%;
       background: white;
-      border-radius: 8px;
+      border-radius: var(--border-radius);
       overflow: hidden;
       box-shadow: 0 5px 30px rgba(0,0,0,0.4);
-      transform: scale(0.9);
-      transition: transform 0.3s ease;
       display: flex;
       flex-direction: column;
-    }
-
-    .pdf-modal.active .pdf-container {
-      transform: scale(1);
     }
 
     .pdf-header {
@@ -332,12 +273,6 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-    }
-
-    .pdf-header h3 {
-      margin: 0;
-      font-size: 1.1rem;
-      font-weight: 500;
     }
 
     .close-btn {
@@ -373,28 +308,19 @@
       border-top: 1px solid #d1c4e9;
     }
 
-    .pdf-controls button {
-      padding: 0.5rem 1rem;
-      border: none;
-      border-radius: 6px;
-      background: var(--primary);
-      color: white;
-      cursor: pointer;
-      transition: background 0.2s ease;
-      font-size: 0.9rem;
-    }
-
-    .pdf-controls button:hover {
-      background: var(--secondary);
-    }
-
     .page-info {
       margin: 0 1rem;
       font-size: 0.9rem;
-      color: #5e35b1;
+      color: var(--primary);
     }
 
-    /* Responsive adjustments */
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    /* Responsive Adjustments */
     @media (max-width: 768px) {
       .container {
         padding: 1.2rem;
@@ -409,10 +335,6 @@
         flex-direction: column;
         gap: 0.8rem;
         padding: 1rem;
-      }
-
-      .filters select {
-        width: 100%;
       }
 
       .resources-grid {
@@ -431,8 +353,8 @@
     <h1>Study Resources</h1>
     
     <div class="filters">
-      <div>
-        <label for="yearSelect">Year:</label>
+      <div class="filter-group">
+        <label for="yearSelect">Year</label>
         <select id="yearSelect">
           <option value="">All Years</option>
           <option value="1">1st Year</option>
@@ -442,8 +364,8 @@
         </select>
       </div>
 
-      <div>
-        <label for="semSelect">Semester:</label>
+      <div class="filter-group">
+        <label for="semSelect">Semester</label>
         <select id="semSelect">
           <option value="">All Semesters</option>
           <option value="1">1st Semester</option>
@@ -451,8 +373,8 @@
         </select>
       </div>
 
-      <div>
-        <label for="subjectSelect">Subject:</label>
+      <div class="filter-group">
+        <label for="subjectSelect">Subject</label>
         <select id="subjectSelect">
           <option value="">All Subjects</option>
           <option value="CP">Computer Programming</option>
@@ -468,8 +390,8 @@
         </select>
       </div>
 
-      <div>
-        <label for="unitSelect">Unit:</label>
+      <div class="filter-group">
+        <label for="unitSelect">Unit</label>
         <select id="unitSelect">
           <option value="">All Units</option>
           <option value="1">Unit 1</option>
@@ -504,49 +426,55 @@
         <button class="close-btn" id="closePdf">&times;</button>
       </div>
       <div class="pdf-viewer-container">
-        <canvas id="pdfViewer" class="pdf-viewer"></canvas>
+        <canvas id="pdfViewer"></canvas>
       </div>
       <div class="pdf-controls">
-        <button id="prevPage">Previous</button>
+        <button id="prevPage" class="btn btn-primary">Previous</button>
         <span class="page-info">Page <span id="currentPage">1</span> of <span id="totalPages">1</span></span>
-        <button id="nextPage">Next</button>
-        <button id="downloadPdf">Download</button>
+        <button id="nextPage" class="btn btn-primary">Next</button>
+        <button id="downloadPdf" class="btn btn-outline">Download</button>
       </div>
     </div>
   </div>
 
   <script>
-    // Set PDF.js worker path
+    // Initialize PDF.js
     pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.worker.min.js';
 
     // DOM Elements
-    const yearSelect = document.getElementById("yearSelect");
-    const semSelect = document.getElementById("semSelect");
-    const subjectSelect = document.getElementById("subjectSelect");
-    const unitSelect = document.getElementById("unitSelect");
-    const resourcesContainer = document.getElementById("resourcesContainer");
-    
-    // PDF Viewer Elements
-    const pdfModal = document.getElementById("pdfModal");
-    const pdfTitle = document.getElementById("pdfTitle");
-    const pdfViewer = document.getElementById("pdfViewer");
-    const closePdf = document.getElementById("closePdf");
-    const prevPage = document.getElementById("prevPage");
-    const nextPage = document.getElementById("nextPage");
-    const currentPage = document.getElementById("currentPage");
-    const totalPages = document.getElementById("totalPages");
-    const downloadPdf = document.getElementById("downloadPdf");
+    const elements = {
+      filters: {
+        year: document.getElementById("yearSelect"),
+        sem: document.getElementById("semSelect"),
+        subject: document.getElementById("subjectSelect"),
+        unit: document.getElementById("unitSelect")
+      },
+      resourcesContainer: document.getElementById("resourcesContainer"),
+      pdfViewer: {
+        modal: document.getElementById("pdfModal"),
+        title: document.getElementById("pdfTitle"),
+        canvas: document.getElementById("pdfViewer"),
+        closeBtn: document.getElementById("closePdf"),
+        prevPage: document.getElementById("prevPage"),
+        nextPage: document.getElementById("nextPage"),
+        currentPage: document.getElementById("currentPage"),
+        totalPages: document.getElementById("totalPages"),
+        downloadBtn: document.getElementById("downloadPdf")
+      }
+    };
 
-    // PDF Viewer State
-    let pdfDoc = null;
-    let pageNum = 1;
-    let pageRendering = false;
-    let pageNumPending = null;
-    let scale = 1.5;
-    let currentPdfUrl = '';
-
-    // Study Resources Data
-    const studyData =[
+    // Application State
+    const state = {
+      pdf: {
+        doc: null,
+        pageNum: 1,
+        rendering: false,
+        pendingPageNum: null,
+        scale: 1.5,
+        currentUrl: '',
+        currentTitle: ''
+      },
+      resources: [
   // M1 - Mathematics I
   {
     "topic": "M1 - Unit 1",
@@ -555,7 +483,7 @@
     "year": "1",
     "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
     "unit": "1",
-    "link": "#",
+    "link": "HTTPS://DRIVE.GOOGLE.COM/FILE/D/109OYGDZD6YZQAQG_DHYSZOYYFAU27CVR/VIEW?USP=SHARING",
     "type": "pdf"
   },
   {
@@ -565,7 +493,7 @@
     "year": "1",
     "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
     "unit": "2",
-    "link": "#",
+    "link": "HTTPS://DRIVE.GOOGLE.COM/FILE/D/109OYGDZD6YZQAQG_DHYSZOYYFAU27CVR/VIEW?USP=SHARING",
     "type": "pdf"
   },
   {
@@ -575,7 +503,7 @@
     "year": "1",
     "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
     "unit": "3",
-    "link": "#",
+    "link": "HTTPS://DRIVE.GOOGLE.COM/FILE/D/109OYGDZD6YZQAQG_DHYSZOYYFAU27CVR/VIEW?USP=SHARING",
     "type": "pdf"
   },
   {
@@ -585,7 +513,7 @@
     "year": "1",
     "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
     "unit": "4",
-    "link": "#",
+    "link": "HTTPS://DRIVE.GOOGLE.COM/FILE/D/109OYGDZD6YZQAQG_DHYSZOYYFAU27CVR/VIEW?USP=SHARING",
     "type": "pdf"
   },
   {
@@ -595,7 +523,7 @@
     "year": "1",
     "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
     "unit": "5",
-    "link": "#",
+    "link": "HTTPS://DRIVE.GOOGLE.COM/FILE/D/109OYGDZD6YZQAQG_DHYSZOYYFAU27CVR/VIEW?USP=SHARING",
     "type": "pdf"
   },
 
@@ -607,7 +535,7 @@
     "year": "1",
     "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
     "unit": "1",
-    "link": "#",
+    "link": "HTTPS://DRIVE.GOOGLE.COM/FILE/D/109OYGDZD6YZQAQG_DHYSZOYYFAU27CVR/VIEW?USP=SHARING",
     "type": "pdf"
   },
   {
@@ -617,7 +545,7 @@
     "year": "1",
     "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
     "unit": "2",
-    "link": "#",
+    "link": "HTTPS://DRIVE.GOOGLE.COM/FILE/D/109OYGDZD6YZQAQG_DHYSZOYYFAU27CVR/VIEW?USP=SHARING",
     "type": "pdf"
   },
   {
@@ -627,7 +555,7 @@
     "year": "1",
     "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
     "unit": "3",
-    "link": "#",
+    "link": "HTTPS://DRIVE.GOOGLE.COM/FILE/D/109OYGDZD6YZQAQG_DHYSZOYYFAU27CVR/VIEW?USP=SHARING",
     "type": "pdf"
   },
   {
@@ -637,7 +565,7 @@
     "year": "1",
     "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
     "unit": "4",
-    "link": "#",
+    "link": "HTTPS://DRIVE.GOOGLE.COM/FILE/D/109OYGDZD6YZQAQG_DHYSZOYYFAU27CVR/VIEW?USP=SHARING",
     "type": "pdf"
   },
   {
@@ -647,7 +575,7 @@
     "year": "1",
     "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
     "unit": "5",
-    "link": "#",
+    "link": "HTTPS://DRIVE.GOOGLE.COM/FILE/D/109OYGDZD6YZQAQG_DHYSZOYYFAU27CVR/VIEW?USP=SHARING",
     "type": "pdf"
   },
 
@@ -659,7 +587,7 @@
     "year": "1",
     "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
     "unit": "1",
-    "link": "#",
+    "link": "HTTPS://DRIVE.GOOGLE.COM/FILE/D/109OYGDZD6YZQAQG_DHYSZOYYFAU27CVR/VIEW?USP=SHARING",
     "type": "pdf"
   },
   {
@@ -669,7 +597,7 @@
     "year": "1",
     "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
     "unit": "2",
-    "link": "#",
+    "link": "HTTPS://DRIVE.GOOGLE.COM/FILE/D/109OYGDZD6YZQAQG_DHYSZOYYFAU27CVR/VIEW?USP=SHARING",
     "type": "pdf"
   },
   {
@@ -679,7 +607,7 @@
     "year": "1",
     "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
     "unit": "3",
-    "link": "#",
+    "link": "HTTPS://DRIVE.GOOGLE.COM/FILE/D/109OYGDZD6YZQAQG_DHYSZOYYFAU27CVR/VIEW?USP=SHARING",
     "type": "pdf"
   },
   {
@@ -689,7 +617,7 @@
     "year": "1",
     "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
     "unit": "4",
-    "link": "#",
+    "link": "HTTPS://DRIVE.GOOGLE.COM/FILE/D/109OYGDZD6YZQAQG_DHYSZOYYFAU27CVR/VIEW?USP=SHARING",
     "type": "pdf"
   },
   {
@@ -699,7 +627,7 @@
     "year": "1",
     "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
     "unit": "5",
-    "link": "#",
+    "link": "HTTPS://DRIVE.GOOGLE.COM/FILE/D/109OYGDZD6YZQAQG_DHYSZOYYFAU27CVR/VIEW?USP=SHARING",
     "type": "pdf"
   },
 
@@ -711,7 +639,7 @@
     "year": "1",
     "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
     "unit": "1",
-    "link": "#",
+    "link": "HTTPS://DRIVE.GOOGLE.COM/FILE/D/109OYGDZD6YZQAQG_DHYSZOYYFAU27CVR/VIEW?USP=SHARING",
     "type": "pdf"
   },
   {
@@ -721,7 +649,7 @@
     "year": "1",
     "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
     "unit": "2",
-    "link": "#",
+    "link": "HTTPS://DRIVE.GOOGLE.COM/FILE/D/109OYGDZD6YZQAQG_DHYSZOYYFAU27CVR/VIEW?USP=SHARING",
     "type": "pdf"
   },
   {
@@ -731,7 +659,7 @@
     "year": "1",
     "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
     "unit": "3",
-    "link": "#",
+    "link": "HTTPS://DRIVE.GOOGLE.COM/FILE/D/109OYGDZD6YZQAQG_DHYSZOYYFAU27CVR/VIEW?USP=SHARING",
     "type": "pdf"
   },
   {
@@ -741,7 +669,7 @@
     "year": "1",
     "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
     "unit": "4",
-    "link": "#",
+    "link": "HTTPS://DRIVE.GOOGLE.COM/FILE/D/109OYGDZD6YZQAQG_DHYSZOYYFAU27CVR/VIEW?USP=SHARING",
     "type": "pdf"
   },
   {
@@ -751,7 +679,7 @@
     "year": "1",
     "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
     "unit": "5",
-    "link": "#",
+    "link": "HTTPS://DRIVE.GOOGLE.COM/FILE/D/109OYGDZD6YZQAQG_DHYSZOYYFAU27CVR/VIEW?USP=SHARING",
     "type": "pdf"
   },
 
@@ -773,7 +701,7 @@
     "year": "1",
     "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
     "unit": "2",
-    "link": "#",
+    "link": "HTTPS://DRIVE.GOOGLE.COM/FILE/D/109OYGDZD6YZQAQG_DHYSZOYYFAU27CVR/VIEW?USP=SHARING",
     "type": "pdf"
   },
   {
@@ -783,7 +711,7 @@
     "year": "1",
     "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
     "unit": "3",
-    "link": "#",
+    "link": "HTTPS://DRIVE.GOOGLE.COM/FILE/D/109OYGDZD6YZQAQG_DHYSZOYYFAU27CVR/VIEW?USP=SHARING",
     "type": "pdf"
   },
   {
@@ -793,7 +721,7 @@
     "year": "1",
     "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
     "unit": "4",
-    "link": "#",
+    "link": "HTTPS://DRIVE.GOOGLE.COM/FILE/D/109OYGDZD6YZQAQG_DHYSZOYYFAU27CVR/VIEW?USP=SHARING",
     "type": "pdf"
   },
   {
@@ -803,7 +731,7 @@
     "year": "1",
     "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
     "unit": "5",
-    "link": "#",
+    "link": "HTTPS://DRIVE.GOOGLE.COM/FILE/D/109OYGDZD6YZQAQG_DHYSZOYYFAU27CVR/VIEW?USP=SHARING",
     "type": "pdf"
   },
 
@@ -815,7 +743,7 @@
     "year": "1",
     "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
     "unit": "1",
-    "link": "#",
+    "link": "HTTPS://DRIVE.GOOGLE.COM/FILE/D/109OYGDZD6YZQAQG_DHYSZOYYFAU27CVR/VIEW?USP=SHARING",
     "type": "pdf"
   },
   {
@@ -825,7 +753,7 @@
     "year": "1",
     "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
     "unit": "2",
-    "link": "#",
+    "link": "HTTPS://DRIVE.GOOGLE.COM/FILE/D/109OYGDZD6YZQAQG_DHYSZOYYFAU27CVR/VIEW?USP=SHARING",
     "type": "pdf"
   },
   {
@@ -835,7 +763,7 @@
     "year": "1",
     "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
     "unit": "3",
-    "link": "#",
+    "link": "HTTPS://DRIVE.GOOGLE.COM/FILE/D/109OYGDZD6YZQAQG_DHYSZOYYFAU27CVR/VIEW?USP=SHARING",
     "type": "pdf"
   },
   {
@@ -845,7 +773,7 @@
     "year": "1",
     "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
     "unit": "4",
-    "link": "#",
+    "link": "HTTPS://DRIVE.GOOGLE.COM/FILE/D/109OYGDZD6YZQAQG_DHYSZOYYFAU27CVR/VIEW?USP=SHARING",
     "type": "pdf"
   },
   {
@@ -855,7 +783,7 @@
     "year": "1",
     "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
     "unit": "5",
-    "link": "#",
+    "link": "HTTPS://DRIVE.GOOGLE.COM/FILE/D/109OYGDZD6YZQAQG_DHYSZOYYFAU27CVR/VIEW?USP=SHARING",
     "type": "pdf"
   },
 
@@ -867,7 +795,7 @@
     "year": "1",
     "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
     "unit": "1",
-    "link": "#",
+    "link": "HTTPS://DRIVE.GOOGLE.COM/FILE/D/109OYGDZD6YZQAQG_DHYSZOYYFAU27CVR/VIEW?USP=SHARING",
     "type": "pdf"
   },
   {
@@ -877,7 +805,7 @@
     "year": "1",
     "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
     "unit": "2",
-    "link": "#",
+    "link": "HTTPS://DRIVE.GOOGLE.COM/FILE/D/109OYGDZD6YZQAQG_DHYSZOYYFAU27CVR/VIEW?USP=SHARING",
     "type": "pdf"
   },
   {
@@ -887,7 +815,7 @@
     "year": "1",
     "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
     "unit": "3",
-    "link": "#",
+    "link": "HTTPS://DRIVE.GOOGLE.COM/FILE/D/109OYGDZD6YZQAQG_DHYSZOYYFAU27CVR/VIEW?USP=SHARING",
     "type": "pdf"
   },
   {
@@ -897,7 +825,7 @@
     "year": "1",
     "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
     "unit": "4",
-    "link": "#",
+    "link": "HTTPS://DRIVE.GOOGLE.COM/FILE/D/109OYGDZD6YZQAQG_DHYSZOYYFAU27CVR/VIEW?USP=SHARING",
     "type": "pdf"
   },
   {
@@ -907,7 +835,7 @@
     "year": "1",
     "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
     "unit": "5",
-    "link": "#",
+    "link": "HTTPS://DRIVE.GOOGLE.COM/FILE/D/109OYGDZD6YZQAQG_DHYSZOYYFAU27CVR/VIEW?USP=SHARING",
     "type": "pdf"
   },
 
@@ -919,7 +847,7 @@
     "year": "1",
     "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
     "unit": "1",
-    "link": "#",
+    "link": "HTTPS://DRIVE.GOOGLE.COM/FILE/D/109OYGDZD6YZQAQG_DHYSZOYYFAU27CVR/VIEW?USP=SHARING",
     "type": "pdf"
   },
   {
@@ -929,7 +857,7 @@
     "year": "1",
     "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
     "unit": "2",
-    "link": "#",
+    "link": "HTTPS://DRIVE.GOOGLE.COM/FILE/D/109OYGDZD6YZQAQG_DHYSZOYYFAU27CVR/VIEW?USP=SHARING",
     "type": "pdf"
   },
   {
@@ -939,7 +867,7 @@
     "year": "1",
     "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
     "unit": "3",
-    "link": "#",
+    "link": "HTTPS://DRIVE.GOOGLE.COM/FILE/D/109OYGDZD6YZQAQG_DHYSZOYYFAU27CVR/VIEW?USP=SHARING",
     "type": "pdf"
   },
   {
@@ -949,7 +877,7 @@
     "year": "1",
     "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
     "unit": "4",
-    "link": "#",
+    "link": "HTTPS://DRIVE.GOOGLE.COM/FILE/D/109OYGDZD6YZQAQG_DHYSZOYYFAU27CVR/VIEW?USP=SHARING",
     "type": "pdf"
   },
   {
@@ -959,7 +887,7 @@
     "year": "1",
     "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
     "unit": "5",
-    "link": "#",
+    "link": "HTTPS://DRIVE.GOOGLE.COM/FILE/D/109OYGDZD6YZQAQG_DHYSZOYYFAU27CVR/VIEW?USP=SHARING",
     "type": "pdf"
   },
 
@@ -971,7 +899,7 @@
     "year": "1",
     "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
     "unit": "1",
-    "link": "#",
+    "link": "HTTPS://DRIVE.GOOGLE.COM/FILE/D/109OYGDZD6YZQAQG_DHYSZOYYFAU27CVR/VIEW?USP=SHARING",
     "type": "pdf"
   },
   {
@@ -981,7 +909,7 @@
     "year": "1",
     "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
     "unit": "2",
-    "link": "#",
+    "link": "HTTPS://DRIVE.GOOGLE.COM/FILE/D/109OYGDZD6YZQAQG_DHYSZOYYFAU27CVR/VIEW?USP=SHARING",
     "type": "pdf"
   },
   {
@@ -991,7 +919,7 @@
     "year": "1",
     "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
     "unit": "3",
-    "link": "#",
+    "link": "HTTPS://DRIVE.GOOGLE.COM/FILE/D/109OYGDZD6YZQAQG_DHYSZOYYFAU27CVR/VIEW?USP=SHARING",
     "type": "pdf"
   },
   {
@@ -1001,7 +929,7 @@
     "year": "1",
     "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
     "unit": "4",
-    "link": "#",
+    "link": "HTTPS://DRIVE.GOOGLE.COM/FILE/D/109OYGDZD6YZQAQG_DHYSZOYYFAU27CVR/VIEW?USP=SHARING",
     "type": "pdf"
   },
   {
@@ -1011,7 +939,7 @@
     "year": "1",
     "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
     "unit": "5",
-    "link": "#",
+    "link": "HTTPS://DRIVE.GOOGLE.COM/FILE/D/109OYGDZD6YZQAQG_DHYSZOYYFAU27CVR/VIEW?USP=SHARING",
     "type": "pdf"
   },
 
@@ -1023,7 +951,7 @@
     "year": "1",
     "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
     "unit": "1",
-    "link": "#",
+    "link": "HTTPS://DRIVE.GOOGLE.COM/FILE/D/109OYGDZD6YZQAQG_DHYSZOYYFAU27CVR/VIEW?USP=SHARING",
     "type": "pdf"
   },
   {
@@ -1033,7 +961,7 @@
     "year": "1",
     "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
     "unit": "2",
-    "link": "#",
+    "link": "HTTPS://DRIVE.GOOGLE.COM/FILE/D/109OYGDZD6YZQAQG_DHYSZOYYFAU27CVR/VIEW?USP=SHARING",
     "type": "pdf"
   },
   {
@@ -1043,7 +971,7 @@
     "year": "1",
     "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
     "unit": "3",
-    "link": "#",
+    "link": "HTTPS://DRIVE.GOOGLE.COM/FILE/D/109OYGDZD6YZQAQG_DHYSZOYYFAU27CVR/VIEW?USP=SHARING",
     "type": "pdf"
   },
   {
@@ -1053,7 +981,7 @@
     "year": "1",
     "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
     "unit": "4",
-    "link": "#",
+    "link": "HTTPS://DRIVE.GOOGLE.COM/FILE/D/109OYGDZD6YZQAQG_DHYSZOYYFAU27CVR/VIEW?USP=SHARING",
     "type": "pdf"
   },
   {
@@ -1063,7 +991,7 @@
     "year": "1",
     "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
     "unit": "5",
-    "link": "#",
+    "link": "HTTPS://DRIVE.GOOGLE.COM/FILE/D/109OYGDZD6YZQAQG_DHYSZOYYFAU27CVR/VIEW?USP=SHARING",
     "type": "pdf"
   },
 
@@ -1075,7 +1003,7 @@
     "year": "1",
     "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
     "unit": "1",
-    "link": "#",
+    "link": "HTTPS://DRIVE.GOOGLE.COM/FILE/D/109OYGDZD6YZQAQG_DHYSZOYYFAU27CVR/VIEW?USP=SHARING",
     "type": "pdf"
   },
   {
@@ -1085,7 +1013,7 @@
     "year": "1",
     "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
     "unit": "2",
-    "link": "#",
+    "link": "HTTPS://DRIVE.GOOGLE.COM/FILE/D/109OYGDZD6YZQAQG_DHYSZOYYFAU27CVR/VIEW?USP=SHARING",
     "type": "pdf"
   },
   {
@@ -1095,7 +1023,7 @@
     "year": "1",
     "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
     "unit": "3",
-    "link": "#",
+    "link": "HTTPS://DRIVE.GOOGLE.COM/FILE/D/109OYGDZD6YZQAQG_DHYSZOYYFAU27CVR/VIEW?USP=SHARING",
     "type": "pdf"
   },
   {
@@ -1105,7 +1033,7 @@
     "year": "1",
     "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
     "unit": "4",
-    "link": "#",
+    "link": "HTTPS://DRIVE.GOOGLE.COM/FILE/D/109OYGDZD6YZQAQG_DHYSZOYYFAU27CVR/VIEW?USP=SHARING",
     "type": "pdf"
   },
   {
@@ -1115,7 +1043,7 @@
     "year": "1",
     "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
     "unit": "5",
-    "link": "#",
+    "link": "HTTPS://DRIVE.GOOGLE.COM/FILE/D/109OYGDZD6YZQAQG_DHYSZOYYFAU27CVR/VIEW?USP=SHARING",
     "type": "pdf"
   },
 
@@ -1127,7 +1055,7 @@
     "year": "1",
     "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
     "unit": "1",
-    "link": "#",
+    "link": "HTTPS://DRIVE.GOOGLE.COM/FILE/D/109OYGDZD6YZQAQG_DHYSZOYYFAU27CVR/VIEW?USP=SHARING",
     "type": "pdf"
   },
   {
@@ -1137,7 +1065,7 @@
     "year": "1",
     "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
     "unit": "2",
-    "link": "#",
+    "link": "HTTPS://DRIVE.GOOGLE.COM/FILE/D/109OYGDZD6YZQAQG_DHYSZOYYFAU27CVR/VIEW?USP=SHARING",
     "type": "pdf"
   },
   {
@@ -1147,7 +1075,7 @@
     "year": "1",
     "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
     "unit": "3",
-    "link": "#",
+    "link": "HTTPS://DRIVE.GOOGLE.COM/FILE/D/109OYGDZD6YZQAQG_DHYSZOYYFAU27CVR/VIEW?USP=SHARING",
     "type": "pdf"
   },
   {
@@ -1157,7 +1085,7 @@
     "year": "1",
     "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
     "unit": "4",
-    "link": "#",
+    "link": "HTTPS://DRIVE.GOOGLE.COM/FILE/D/109OYGDZD6YZQAQG_DHYSZOYYFAU27CVR/VIEW?USP=SHARING",
     "type": "pdf"
   },
   {
@@ -1167,7 +1095,7 @@
     "year": "1",
     "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
     "unit": "5",
-    "link": "#",
+    "link": "HTTPS://DRIVE.GOOGLE.COM/FILE/D/109OYGDZD6YZQAQG_DHYSZOYYFAU27CVR/VIEW?USP=SHARING",
     "type": "pdf"
   },
 
@@ -1179,7 +1107,7 @@
     "year": "1",
     "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
     "unit": "1",
-    "link": "#",
+    "link": "HTTPS://DRIVE.GOOGLE.COM/FILE/D/109OYGDZD6YZQAQG_DHYSZOYYFAU27CVR/VIEW?USP=SHARING",
     "type": "pdf"
   },
   {
@@ -1189,7 +1117,7 @@
     "year": "1",
     "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
     "unit": "2",
-    "link": "#",
+    "link": "HTTPS://DRIVE.GOOGLE.COM/FILE/D/109OYGDZD6YZQAQG_DHYSZOYYFAU27CVR/VIEW?USP=SHARING",
     "type": "pdf"
   },
   {
@@ -1199,7 +1127,7 @@
     "year": "1",
     "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
     "unit": "3",
-    "link": "#",
+    "link": "HTTPS://DRIVE.GOOGLE.COM/FILE/D/109OYGDZD6YZQAQG_DHYSZOYYFAU27CVR/VIEW?USP=SHARING",
     "type": "pdf"
   },
   {
@@ -1209,7 +1137,7 @@
     "year": "1",
     "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
     "unit": "4",
-    "link": "#",
+    "link": "HTTPS://DRIVE.GOOGLE.COM/FILE/D/109OYGDZD6YZQAQG_DHYSZOYYFAU27CVR/VIEW?USP=SHARING",
     "type": "pdf"
   },
   {
@@ -1219,7 +1147,7 @@
     "year": "1",
     "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
     "unit": "5",
-    "link": "#",
+    "link": "HTTPS://DRIVE.GOOGLE.COM/FILE/D/109OYGDZD6YZQAQG_DHYSZOYYFAU27CVR/VIEW?USP=SHARING",
     "type": "pdf"
   },
 
@@ -1231,7 +1159,7 @@
     "year": "1",
     "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
     "unit": "1",
-    "link": "#",
+    "link": "HTTPS://DRIVE.GOOGLE.COM/FILE/D/109OYGDZD6YZQAQG_DHYSZOYYFAU27CVR/VIEW?USP=SHARING",
     "type": "pdf"
   },
   {
@@ -1241,7 +1169,7 @@
     "year": "1",
     "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
     "unit": "2",
-    "link": "#",
+    "link": "HTTPS://DRIVE.GOOGLE.COM/FILE/D/109OYGDZD6YZQAQG_DHYSZOYYFAU27CVR/VIEW?USP=SHARING",
     "type": "pdf"
   },
   {
@@ -1251,7 +1179,7 @@
     "year": "1",
     "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
     "unit": "3",
-    "link": "#",
+    "link": "HTTPS://DRIVE.GOOGLE.COM/FILE/D/109OYGDZD6YZQAQG_DHYSZOYYFAU27CVR/VIEW?USP=SHARING",
     "type": "pdf"
   },
   {
@@ -1261,7 +1189,7 @@
     "year": "1",
     "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
     "unit": "4",
-    "link": "#",
+    "link": "HTTPS://DRIVE.GOOGLE.COM/FILE/D/109OYGDZD6YZQAQG_DHYSZOYYFAU27CVR/VIEW?USP=SHARING",
     "type": "pdf"
   },
   {
@@ -1271,7 +1199,7 @@
     "year": "1",
     "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
     "unit": "5",
-    "link": "#",
+    "link": "HTTPS://DRIVE.GOOGLE.COM/FILE/D/109OYGDZD6YZQAQG_DHYSZOYYFAU27CVR/VIEW?USP=SHARING",
     "type": "pdf"
   },
 
@@ -1283,7 +1211,7 @@
     "year": "1",
     "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
     "unit": "1",
-    "link": "#",
+    "link": "HTTPS://DRIVE.GOOGLE.COM/FILE/D/109OYGDZD6YZQAQG_DHYSZOYYFAU27CVR/VIEW?USP=SHARING",
     "type": "pdf"
   },
   {
@@ -1293,7 +1221,7 @@
     "year": "1",
     "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
     "unit": "2",
-    "link": "#",
+    "link": "HTTPS://DRIVE.GOOGLE.COM/FILE/D/109OYGDZD6YZQAQG_DHYSZOYYFAU27CVR/VIEW?USP=SHARING",
     "type": "pdf"
   },
   {
@@ -1303,7 +1231,7 @@
     "year": "1",
     "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
     "unit": "3",
-    "link": "#",
+    "link": "HTTPS://DRIVE.GOOGLE.COM/FILE/D/109OYGDZD6YZQAQG_DHYSZOYYFAU27CVR/VIEW?USP=SHARING",
     "type": "pdf"
   },
   {
@@ -1313,7 +1241,7 @@
     "year": "1",
     "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
     "unit": "4",
-    "link": "#",
+    "link": "HTTPS://DRIVE.GOOGLE.COM/FILE/D/109OYGDZD6YZQAQG_DHYSZOYYFAU27CVR/VIEW?USP=SHARING",
     "type": "pdf"
   },
   {
@@ -1323,7 +1251,7 @@
     "year": "1",
     "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
     "unit": "5",
-    "link": "#",
+    "link": "HTTPS://DRIVE.GOOGLE.COM/FILE/D/109OYGDZD6YZQAQG_DHYSZOYYFAU27CVR/VIEW?USP=SHARING",
     "type": "pdf"
   },
 
@@ -1335,7 +1263,7 @@
     "year": "1",
     "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
     "unit": "1",
-    "link": "#",
+    "link": "HTTPS://DRIVE.GOOGLE.COM/FILE/D/109OYGDZD6YZQAQG_DHYSZOYYFAU27CVR/VIEW?USP=SHARING",
     "type": "pdf"
   },
   {
@@ -1345,7 +1273,7 @@
     "year": "1",
     "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
     "unit": "2",
-    "link": "#",
+    "link": "HTTPS://DRIVE.GOOGLE.COM/FILE/D/109OYGDZD6YZQAQG_DHYSZOYYFAU27CVR/VIEW?USP=SHARING",
     "type": "pdf"
   },
   {
@@ -1355,7 +1283,7 @@
     "year": "1",
     "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
     "unit": "3",
-    "link": "#",
+    "link": "HTTPS://DRIVE.GOOGLE.COM/FILE/D/109OYGDZD6YZQAQG_DHYSZOYYFAU27CVR/VIEW?USP=SHARING",
     "type": "pdf"
   },
   {
@@ -1365,7 +1293,7 @@
     "year": "1",
     "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
     "unit": "4",
-    "link": "#",
+    "link": "HTTPS://DRIVE.GOOGLE.COM/FILE/D/109OYGDZD6YZQAQG_DHYSZOYYFAU27CVR/VIEW?USP=SHARING",
     "type": "pdf"
   },
   {
@@ -1375,7 +1303,7 @@
     "year": "1",
     "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
     "unit": "5",
-    "link": "#",
+    "link": "HTTPS://DRIVE.GOOGLE.COM/FILE/D/109OYGDZD6YZQAQG_DHYSZOYYFAU27CVR/VIEW?USP=SHARING",
     "type": "pdf"
   },
 
@@ -1387,7 +1315,7 @@
     "year": "1",
     "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
     "unit": "1",
-    "link": "#",
+    "link": "HTTPS://DRIVE.GOOGLE.COM/FILE/D/109OYGDZD6YZQAQG_DHYSZOYYFAU27CVR/VIEW?USP=SHARING",
     "type": "pdf"
   },
   {
@@ -1397,7 +1325,7 @@
     "year": "1",
     "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
     "unit": "2",
-    "link": "#",
+    "link": "HTTPS://DRIVE.GOOGLE.COM/FILE/D/109OYGDZD6YZQAQG_DHYSZOYYFAU27CVR/VIEW?USP=SHARING",
     "type": "pdf"
   },
   {
@@ -1407,7 +1335,7 @@
     "year": "1",
     "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
     "unit": "3",
-    "link": "#",
+    "link": "HTTPS://DRIVE.GOOGLE.COM/FILE/D/109OYGDZD6YZQAQG_DHYSZOYYFAU27CVR/VIEW?USP=SHARING",
     "type": "pdf"
   },
   {
@@ -1417,7 +1345,7 @@
     "year": "1",
     "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
     "unit": "4",
-    "link": "#",
+    "link": "HTTPS://DRIVE.GOOGLE.COM/FILE/D/109OYGDZD6YZQAQG_DHYSZOYYFAU27CVR/VIEW?USP=SHARING",
     "type": "pdf"
   },
   {
@@ -1427,7 +1355,7 @@
     "year": "1",
     "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
     "unit": "5",
-    "link": "#",
+    "link": "HTTPS://DRIVE.GOOGLE.COM/FILE/D/109OYGDZD6YZQAQG_DHYSZOYYFAU27CVR/VIEW?USP=SHARING",
     "type": "pdf"
   },
 
@@ -1439,7 +1367,7 @@
     "year": "1",
     "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
     "unit": "1",
-    "link": "#",
+    "link": "HTTPS://DRIVE.GOOGLE.COM/FILE/D/109OYGDZD6YZQAQG_DHYSZOYYFAU27CVR/VIEW?USP=SHARING",
     "type": "pdf"
   },
   {
@@ -1449,7 +1377,7 @@
     "year": "1",
     "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
     "unit": "2",
-    "link": "#",
+    "link": "HTTPS://DRIVE.GOOGLE.COM/FILE/D/109OYGDZD6YZQAQG_DHYSZOYYFAU27CVR/VIEW?USP=SHARING",
     "type": "pdf"
   },
   {
@@ -1459,7 +1387,7 @@
     "year": "1",
     "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
     "unit": "3",
-    "link": "#",
+    "link": "HTTPS://DRIVE.GOOGLE.COM/FILE/D/109OYGDZD6YZQAQG_DHYSZOYYFAU27CVR/VIEW?USP=SHARING",
     "type": "pdf"
   },
   {
@@ -1469,7 +1397,7 @@
     "year": "1",
     "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
     "unit": "4",
-    "link": "#",
+    "link": "HTTPS://DRIVE.GOOGLE.COM/FILE/D/109OYGDZD6YZQAQG_DHYSZOYYFAU27CVR/VIEW?USP=SHARING",
     "type": "pdf"
   },
   {
@@ -1479,7 +1407,7 @@
     "year": "1",
     "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
     "unit": "5",
-    "link": "#",
+    "link": "HTTPS://DRIVE.GOOGLE.COM/FILE/D/109OYGDZD6YZQAQG_DHYSZOYYFAU27CVR/VIEW?USP=SHARING",
     "type": "pdf"
   },
 
@@ -1491,7 +1419,7 @@
     "year": "1",
     "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
     "unit": "1",
-    "link": "#",
+    "link": "HTTPS://DRIVE.GOOGLE.COM/FILE/D/109OYGDZD6YZQAQG_DHYSZOYYFAU27CVR/VIEW?USP=SHARING",
     "type": "pdf"
   },
   {
@@ -1501,7 +1429,7 @@
     "year": "1",
     "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
     "unit": "2",
-    "link": "#",
+    "link": "HTTPS://DRIVE.GOOGLE.COM/FILE/D/109OYGDZD6YZQAQG_DHYSZOYYFAU27CVR/VIEW?USP=SHARING",
     "type": "pdf"
   },
   {
@@ -1511,7 +1439,7 @@
     "year": "1",
     "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
     "unit": "3",
-    "link": "#",
+    "link": "HTTPS://DRIVE.GOOGLE.COM/FILE/D/109OYGDZD6YZQAQG_DHYSZOYYFAU27CVR/VIEW?USP=SHARING",
     "type": "pdf"
   },
   {
@@ -1521,7 +1449,7 @@
     "year": "1",
     "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
     "unit": "4",
-    "link": "#",
+    "link": "HTTPS://DRIVE.GOOGLE.COM/FILE/D/109OYGDZD6YZQAQG_DHYSZOYYFAU27CVR/VIEW?USP=SHARING",
     "type": "pdf"
   },
   {
@@ -1531,7 +1459,7 @@
     "year": "1",
     "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
     "unit": "5",
-    "link": "#",
+    "link": "HTTPS://DRIVE.GOOGLE.COM/FILE/D/109OYGDZD6YZQAQG_DHYSZOYYFAU27CVR/VIEW?USP=SHARING",
     "type": "pdf"
   },
 
@@ -1543,7 +1471,7 @@
     "year": "1",
     "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
     "unit": "1",
-    "link": "#",
+    "link": "HTTPS://DRIVE.GOOGLE.COM/FILE/D/109OYGDZD6YZQAQG_DHYSZOYYFAU27CVR/VIEW?USP=SHARING",
     "type": "pdf"
   },
   {
@@ -1553,7 +1481,7 @@
     "year": "1",
     "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
     "unit": "2",
-    "link": "#",
+    "link": "HTTPS://DRIVE.GOOGLE.COM/FILE/D/109OYGDZD6YZQAQG_DHYSZOYYFAU27CVR/VIEW?USP=SHARING",
     "type": "pdf"
   },
   {
@@ -1563,7 +1491,7 @@
     "year": "1",
     "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
     "unit": "3",
-    "link": "#",
+    "link": "HTTPS://DRIVE.GOOGLE.COM/FILE/D/109OYGDZD6YZQAQG_DHYSZOYYFAU27CVR/VIEW?USP=SHARING",
     "type": "pdf"
   },
   {
@@ -1573,7 +1501,7 @@
     "year": "1",
     "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
     "unit": "4",
-    "link": "#",
+    "link": "HTTPS://DRIVE.GOOGLE.COM/FILE/D/109OYGDZD6YZQAQG_DHYSZOYYFAU27CVR/VIEW?USP=SHARING",
     "type": "pdf"
   },
   {
@@ -1583,198 +1511,349 @@
     "year": "1",
     "branch": ["CSE", "AIML", "CIC", "ECE", "EEE", "MECH", "CIVIL", "IT", "AIDS", "CSIT"],
     "unit": "5",
-    "link": "#",
+    "link": "HTTPS://DRIVE.GOOGLE.COM/FILE/D/109OYGDZD6YZQAQG_DHYSZOYYFAU27CVR/VIEW?USP=SHARING",
     "type": "pdf"
   }
-];
+]
+    };
 
-    // Render PDF page
-    function renderPage(num) {
-      pageRendering = true;
-      pdfDoc.getPage(num).then(function(page) {
-        const viewport = page.getViewport({ scale: scale });
-        pdfViewer.height = viewport.height;
-        pdfViewer.width = viewport.width;
-
-        const renderContext = {
-          canvasContext: pdfViewer.getContext('2d'),
-          viewport: viewport
-        };
-
-        const renderTask = page.render(renderContext);
-
-        renderTask.promise.then(function() {
-          pageRendering = false;
-          currentPage.textContent = num;
-          
-          if (pageNumPending !== null) {
-            renderPage(pageNumPending);
-            pageNumPending = null;
+    // Utility Functions
+    const utils = {
+      extractGoogleDriveFileId: (url) => {
+        // Handles multiple Google Drive URL formats
+        const patterns = [
+          /\/file\/d\/([^\/]+)/,
+          /[?&]id=([^&]+)/,
+          /\/uc\?id=([^&]+)/,
+          /\/open\?id=([^&]+)/
+        ];
+        
+        for (const pattern of patterns) {
+          const matches = url.match(pattern);
+          if (matches && matches[1]) {
+            return matches[1];
           }
+        }
+        return null;
+      },
+      
+      getDirectPdfUrl: (url) => {
+        const fileId = utils.extractGoogleDriveFileId(url);
+        if (fileId) {
+          // This is the correct format for direct PDF access
+          return `https://drive.google.com/uc?export=view&id=${fileId}`;
+        }
+        return url;
+      },
+      
+      sanitizeFilename: (name) => {
+        return name.replace(/[^a-z0-9]/gi, '_') + '.pdf';
+      },
+      
+      isGoogleDriveUrl: (url) => {
+        return url.includes('drive.google.com');
+      }
+    };
+
+    // PDF Viewer Functions
+    const pdfViewer = {
+      renderPage: (num) => {
+        state.pdf.rendering = true;
+        
+        state.pdf.doc.getPage(num).then((page) => {
+          const viewport = page.getViewport({ scale: state.pdf.scale });
+          elements.pdfViewer.canvas.height = viewport.height;
+          elements.pdfViewer.canvas.width = viewport.width;
+
+          const renderContext = {
+            canvasContext: elements.pdfViewer.canvas.getContext('2d'),
+            viewport: viewport
+          };
+
+          const renderTask = page.render(renderContext);
+          
+          renderTask.promise.then(() => {
+            state.pdf.rendering = false;
+            elements.pdfViewer.currentPage.textContent = num;
+            
+            if (state.pdf.pendingPageNum !== null) {
+              pdfViewer.renderPage(state.pdf.pendingPageNum);
+              state.pdf.pendingPageNum = null;
+            }
+          });
+        }).catch(error => {
+          console.error("Error rendering page:", error);
+          pdfViewer.showError("Failed to render PDF page");
         });
-      });
-    }
-
-    // Go to previous page
-    function onPrevPage() {
-      if (pageNum <= 1) return;
-      pageNum--;
-      queueRenderPage(pageNum);
-    }
-
-    // Go to next page
-    function onNextPage() {
-      if (pageNum >= pdfDoc.numPages) return;
-      pageNum++;
-      queueRenderPage(pageNum);
-    }
-
-    // Queue page rendering
-    function queueRenderPage(num) {
-      if (pageRendering) {
-        pageNumPending = num;
-      } else {
-        renderPage(num);
-      }
-    }
-
-    // Open PDF in modal
-    function openPdf(title, url) {
-      pdfTitle.textContent = title;
-      currentPdfUrl = url;
-      pdfModal.classList.add('active');
+      },
       
-      // Load the PDF
-      pdfjsLib.getDocument(url).promise.then(function(pdf) {
-        pdfDoc = pdf;
-        totalPages.textContent = pdf.numPages;
-        pageNum = 1;
-        renderPage(pageNum);
-      }).catch(function(error) {
-        console.error('PDF loading error:', error);
-        alert('Failed to load PDF. Please try again or download the file.');
-      });
-    }
-
-    // Close PDF modal
-    function closePdfViewer() {
-      pdfModal.classList.remove('active');
-      if (pdfDoc) {
-        pdfDoc.destroy();
-        pdfDoc = null;
-      }
-    }
-
-    // Download PDF
-    function downloadCurrentPdf() {
-      if (!currentPdfUrl) return;
+      queueRenderPage: (num) => {
+        if (state.pdf.rendering) {
+          state.pdf.pendingPageNum = num;
+        } else {
+          pdfViewer.renderPage(num);
+        }
+      },
       
-      const a = document.createElement('a');
-      a.href = currentPdfUrl;
-      a.download = pdfTitle.textContent + '.pdf';
-      a.target = '_blank';
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-    }
-
-    // Event listeners for PDF viewer
-    closePdf.addEventListener('click', closePdfViewer);
-    prevPage.addEventListener('click', onPrevPage);
-    nextPage.addEventListener('click', onNextPage);
-    downloadPdf.addEventListener('click', downloadCurrentPdf);
-
-    // Close modal when clicking outside
-    pdfModal.addEventListener('click', function(e) {
-      if (e.target === pdfModal) {
-        closePdfViewer();
-      }
-    });
-
-    // Filter resources based on selections
-    function filterResources() {
-      const year = yearSelect.value;
-      const sem = semSelect.value;
-      const subject = subjectSelect.value;
-      const unit = unitSelect.value;
-
-      // Filter resources
-      const filtered = studyData.filter(item =>
-        (!year || item.year === year) &&
-        (!sem || item.semester === sem) &&
-        (!subject || item.subject === subject) &&
-        (!unit || item.unit === unit)
-      );
-
-      renderResources(filtered);
-    }
-
-    // Render filtered resources
-    function renderResources(resources) {
-      resourcesContainer.innerHTML = "";
-
-      if (resources.length === 0) {
-        resourcesContainer.innerHTML = `
-          <div class="empty-state">
-            <i class="fas fa-search"></i>
-            <p>No resources match your selected filters</p>
-            <p class="note">Try adjusting your filters</p>
-          </div>
-        `;
+      open: (title, url) => {
+        state.pdf.currentTitle = title;
+        
+        // Handle Google Drive links specially
+        if (utils.isGoogleDriveUrl(url)) {
+          const fileId = utils.extractGoogleDriveFileId(url);
+          if (fileId) {
+            // Option 1: Open in Google's viewer (recommended)
+            const previewUrl = `https://drive.google.com/file/d/${fileId}/preview`;
+            const usePdfJsFallback = confirm(
+          "Open this PDF in Google Drive viewer?\n\n" +
+          "Click OK to open in Google Drive (recommended).\n" +
+          "Click Cancel to try our built-in viewer instead."
+        );
+        
+        if (usePdfJsFallback) {
+          window.open(previewUrl, '_blank');
+        } else {
+          const directUrl = `https://drive.google.com/uc?export=view&id=${fileId}`;
+          pdfViewer.showInModal(title, directUrl);
+        }
         return;
       }
-
-      resources.forEach((item, index) => {
-        const card = document.createElement("div");
-        card.className = "resource-card";
-        card.style.setProperty('--delay', index % 10); // Stagger animations
-
-        card.innerHTML = `
-          <h3>${item.topic}</h3>
-          <div class="meta">
-            <span><i class="fas fa-calendar-alt"></i> Year ${item.year}</span>
-            <span><i class="fas fa-book"></i> ${item.subject}</span>
-            <span><i class="fas fa-clock"></i> Sem ${item.semester}</span>
-            <span><i class="fas fa-layer-group"></i> Unit ${item.unit}</span>
-          </div>
-          <div class="actions">
-            <button class="btn btn-primary view-pdf" data-title="${item.topic}" data-url="${item.link}">
-              <i class="fas fa-eye"></i> View
-            </button>
-            <a href="${item.link}" target="_blank" class="btn btn-outline">
-              <i class="fas fa-download"></i> Download
-            </a>
-          </div>
-        `;
-
-        resourcesContainer.appendChild(card);
-      });
-
-      // Add event listeners to view buttons
-      document.querySelectorAll('.view-pdf').forEach(btn => {
-        btn.addEventListener('click', function() {
-          const title = this.getAttribute('data-title');
-          const url = this.getAttribute('data-url');
-          openPdf(title, url);
-        });
-      });
     }
-
-    // Event listeners for filters
-    yearSelect.addEventListener("change", filterResources);
-    semSelect.addEventListener("change", filterResources);
-    subjectSelect.addEventListener("change", filterResources);
-    unitSelect.addEventListener("change", filterResources);
-
-    // Initialize with all resources
-    filterResources();
-
-    // Handle window resize for PDF viewer
-    window.addEventListener('resize', function() {
-      if (pdfModal.classList.contains('active') && pdfDoc) {
-        queueRenderPage(pageNum);
+        
+        // For non-Google Drive PDFs
+        pdfViewer.showInModal(title, utils.getDirectPdfUrl(url));
+      },
+      
+      showInModal: (title, url) => {
+        elements.pdfViewer.title.textContent = title;
+        state.pdf.currentUrl = url;
+        elements.pdfViewer.modal.classList.add('active');
+        
+        // Clear previous PDF
+        if (state.pdf.doc) {
+          state.pdf.doc.destroy();
+          state.pdf.doc = null;
+        }
+        
+        // Load the PDF with CORS headers
+        const loadingTask = pdfjsLib.getDocument({
+          url: url,
+          withCredentials: false,
+          httpHeaders: {
+            'Access-Control-Allow-Origin': '*'
+          }
+        });
+        
+        loadingTask.promise.then((pdf) => {
+          state.pdf.doc = pdf;
+          elements.pdfViewer.totalPages.textContent = pdf.numPages;
+          state.pdf.pageNum = 1;
+          pdfViewer.renderPage(state.pdf.pageNum);
+        }).catch((error) => {
+          console.error('PDF loading error:', error);
+          let errorMessage = "Failed to load PDF. Please try downloading the file instead.";
+          
+          if (error.name === 'InvalidPDFException') {
+            errorMessage = "The file is not a valid PDF";
+          } else if (error.message.includes('CORS')) {
+            errorMessage = "CORS error - try downloading instead";
+          }
+          
+          pdfViewer.showError(errorMessage);
+        });
+      },
+      
+      showError: (message) => {
+        const userResponse = confirm(`${message}\n\nWould you like to:\n1. Try downloading instead?\n2. Open in Google Drive?`);
+        
+        if (userResponse) {
+          // Try downloading
+          pdfViewer.download();
+        } else {
+          // Open in Google Drive
+          if (state.pdf.currentUrl && utils.isGoogleDriveUrl(state.pdf.currentUrl)) {
+            const fileId = utils.extractGoogleDriveFileId(state.pdf.currentUrl);
+            if (fileId) {
+              window.open(`https://drive.google.com/file/d/${fileId}/view`, '_blank');
+            }
+          }
+        }
+        
+        pdfViewer.close();
+      },
+      
+      close: () => {
+        elements.pdfViewer.modal.classList.remove('active');
+        if (state.pdf.doc) {
+          state.pdf.doc.destroy();
+          state.pdf.doc = null;
+        }
+      },
+      
+      download: () => {
+        if (!state.pdf.currentUrl) return;
+        
+        const downloadUrl = utils.isGoogleDriveUrl(state.pdf.currentUrl) 
+          ? `https://drive.google.com/uc?export=download&id=${utils.extractGoogleDriveFileId(state.pdf.currentUrl)}`
+          : state.pdf.currentUrl;
+          
+        const a = document.createElement('a');
+        a.href = downloadUrl;
+        a.download = utils.sanitizeFilename(state.pdf.currentTitle);
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        
+        // Fallback for mobile devices
+        setTimeout(() => {
+          if (!document.body.contains(a)) {
+            window.open(downloadUrl, '_blank');
+          }
+        }, 200);
       }
-    });
+    };
+
+    // Resource Management
+    const resourceManager = {
+      filter: () => {
+        const filters = {
+          year: elements.filters.year.value,
+          sem: elements.filters.sem.value,
+          subject: elements.filters.subject.value,
+          unit: elements.filters.unit.value
+        };
+
+        const filtered = state.resources.filter(item =>
+          (!filters.year || item.year === filters.year) &&
+          (!filters.sem || item.semester === filters.sem) &&
+          (!filters.subject || item.subject === filters.subject) &&
+          (!filters.unit || item.unit === filters.unit)
+        );
+
+        resourceManager.render(filtered);
+      },
+      
+      render: (resources) => {
+        elements.resourcesContainer.innerHTML = "";
+
+        if (resources.length === 0) {
+          elements.resourcesContainer.innerHTML = `
+            <div class="empty-state">
+              <i class="fas fa-search"></i>
+              <p>No resources match your selected filters</p>
+              <p>Try adjusting your filters</p>
+            </div>
+          `;
+          return;
+        }
+
+        resources.forEach((item, index) => {
+          const card = document.createElement("div");
+          card.className = "resource-card";
+          card.style.setProperty('--delay', index % 10);
+
+          card.innerHTML = `
+            <h3>${item.topic}</h3>
+            <div class="meta">
+              <span><i class="fas fa-calendar-alt"></i> Year ${item.year}</span>
+              <span><i class="fas fa-book"></i> ${item.subject}</span>
+              <span><i class="fas fa-clock"></i> Sem ${item.semester}</span>
+              <span><i class="fas fa-layer-group"></i> Unit ${item.unit}</span>
+            </div>
+            <div class="actions">
+              <button class="btn btn-primary view-pdf" 
+                      data-title="${item.topic}" 
+                      data-url="${item.link}">
+                <i class="fas fa-eye"></i> View
+              </button>
+              <button class="btn btn-outline download-pdf" 
+                      data-url="${item.link}" 
+                      data-title="${item.topic}">
+                <i class="fas fa-download"></i> Download
+              </button>
+            </div>
+          `;
+
+          elements.resourcesContainer.appendChild(card);
+        });
+
+        // Add event listeners to new buttons
+        document.querySelectorAll('.view-pdf').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const title = btn.getAttribute('data-title');
+            const url = btn.getAttribute('data-url');
+            pdfViewer.open(title, url);
+          });
+        });
+
+        document.querySelectorAll('.download-pdf').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const url = btn.getAttribute('data-url');
+            const title = btn.getAttribute('data-title');
+            resourceManager.downloadPdf(url, title);
+          });
+        });
+      },
+      
+      downloadPdf: (url, title) => {
+        const fileId = utils.extractGoogleDriveFileId(url);
+        const downloadUrl = fileId 
+          ? `https://drive.google.com/uc?export=download&id=${fileId}`
+          : url;
+          
+        const a = document.createElement('a');
+        a.href = downloadUrl;
+        a.download = utils.sanitizeFilename(title);
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      }
+    };
+
+    // Event Listeners
+    const setupEventListeners = () => {
+      // Filter changes
+      Object.values(elements.filters).forEach(filter => {
+        filter.addEventListener("change", resourceManager.filter);
+      });
+
+      // PDF viewer controls
+      elements.pdfViewer.closeBtn.addEventListener('click', pdfViewer.close);
+      elements.pdfViewer.prevPage.addEventListener('click', () => {
+        if (state.pdf.pageNum <= 1) return;
+        state.pdf.pageNum--;
+        pdfViewer.queueRenderPage(state.pdf.pageNum);
+      });
+      elements.pdfViewer.nextPage.addEventListener('click', () => {
+        if (state.pdf.pageNum >= state.pdf.doc?.numPages) return;
+        state.pdf.pageNum++;
+        pdfViewer.queueRenderPage(state.pdf.pageNum);
+      });
+      elements.pdfViewer.downloadBtn.addEventListener('click', pdfViewer.download);
+
+      // Close modal when clicking outside
+      elements.pdfViewer.modal.addEventListener('click', (e) => {
+        if (e.target === elements.pdfViewer.modal) {
+          pdfViewer.close();
+        }
+      });
+
+      // Handle window resize for PDF viewer
+      window.addEventListener('resize', () => {
+        if (elements.pdfViewer.modal.classList.contains('active') && state.pdf.doc) {
+          pdfViewer.queueRenderPage(state.pdf.pageNum);
+        }
+      });
+    };
+
+    // Initialize Application
+    const init = () => {
+      setupEventListeners();
+      resourceManager.filter(); // Initial render
+    };
+
+    // Start the app
+    init();
   </script>
 </body>
 </html>
